@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prezentáció Indítása</title>
+    <title>Start Presentation</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* === Változók === */
+        /* === Variables === */
         :root {
             --color-background-dark: #121215;
             --color-text-primary: #e0e0e0;
@@ -21,7 +21,7 @@
             --color-button-hover-bg: rgba(255, 255, 255, 0.15);
         }
 
-        /* === Alapstílusok === */
+        /* === Base Styles === */
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +32,7 @@
             height: 100%;
         }
 
-        /* === "Lovable" stílusú mozgó háttér === */
+        /* === Animated Background === */
         @keyframes backgroundPan {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -47,7 +47,7 @@
         body {
             font-family: 'Inter', sans-serif;
             color: var(--color-text-primary);
-            display: grid; /* Grid elrendezés a lépések közötti ugrásmentes váltáshoz */
+            display: grid;
             grid-template-rows: auto 1fr;
             grid-template-columns: 1fr;
             justify-content: center;
@@ -56,9 +56,8 @@
             padding: 1.5rem;
             overflow: hidden;
             position: relative;
-            text-align: center; /* Alapértelmezett középre igazítás */
+            text-align: center;
             
-            /* A háttér: sötét alap + 3 elmosott színfolt */
             background-color: var(--color-background-dark);
             background-image: 
                 radial-gradient(at 80% 90%, hsla(28, 100%, 50%, 0.3) 0px, transparent 50%),
@@ -68,7 +67,7 @@
             animation: backgroundPan 40s ease infinite;
         }
 
-        /* === Címek === */
+        /* === Titles === */
         .step-title,
         #loading-step h1 {
             font-weight: 700;
@@ -79,7 +78,19 @@
             text-shadow: 0 2px 15px rgba(0,0,0,0.7);
         }
 
-        /* === Betöltő képernyő szövege === */
+        /* === Helper Text === */
+        .step-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: -1rem; /* Pull up towards title */
+        }
+        
         #loading-step p {
             font-size: 1.1rem;
             font-weight: 400;
@@ -94,7 +105,7 @@
              margin-bottom: 2.5rem;
         }
 
-        /* === Gomb Rácsok === */
+        /* === Button Grids === */
         .user-grid, .language-grid {
             display: grid;
             gap: 1rem;
@@ -108,7 +119,7 @@
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         }
 
-        /* === Gomb és Link stílusok (ÜVEG HATÁSSAL) === */
+        /* === Choice Buttons (Glass) === */
         .user-btn, .language-link {
             background-color: var(--color-button-bg);
             border: 1px solid var(--color-button-border);
@@ -134,7 +145,7 @@
             border-color: var(--color-primary-orange);
             transform: translateY(-2px);
         }
-        .user-btn.active {
+        .user-btn.active, .language-link.active {
             background-color: var(--color-primary-orange);
             color: var(--color-background-dark);
             border-color: var(--color-primary-orange);
@@ -143,12 +154,71 @@
             -webkit-backdrop-filter: none;
         }
 
-        /* === Lépések animációval (JAVÍTOTT LOGIKA A "VILLANÁS" ELLEN) === */
+        /* === NEW: Text Input (Domain) === */
+        .text-input {
+            width: 100%;
+            max-width: 450px; /* Don't let it get too wide */
+            height: 50px;
+            padding: 0.9rem 1.5rem;
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            color: var(--color-text-primary);
+            background-color: var(--color-button-bg);
+            border: 1px solid var(--color-button-border);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.2s ease-out;
+            margin-bottom: 1.5rem; /* Space before the button */
+        }
+        .text-input:focus {
+            outline: none;
+            border-color: var(--color-primary-orange);
+            background-color: var(--color-button-hover-bg);
+        }
+        .text-input::placeholder {
+            color: var(--color-text-secondary);
+            opacity: 0.7;
+        }
+        
+        /* === NEW: Action Button (Generate) === */
+        .action-btn {
+            background-color: var(--color-primary-orange);
+            border: 1px solid var(--color-primary-orange);
+            color: var(--color-background-dark);
+            padding: 0.9rem 2.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            transition: all 0.2s ease-out;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+        .action-btn:hover {
+            background-color: var(--color-primary-orange);
+            border-color: var(--color-primary-orange);
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+        .action-btn:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+        }
+
+        /* === Step Animation Logic (Flash-Bug Fixed) === */
         .step-content {
             grid-row: 2 / 3;
             grid-column: 1 / 2;
             
-            /* ALAPBÓL REJTETT */
+            /* Hidden by default */
             opacity: 0; 
             pointer-events: none;
             transform: translateY(10px);
@@ -156,17 +226,15 @@
             transition: opacity 0.3s ease-out, transform 0.3s ease-out;
             will-change: opacity, transform;
         }
-
-        /* AZ AKTÍV LÉPÉS STÍLUSA */
         .step-content.is-visible {
             opacity: 1;
             pointer-events: auto;
             transform: translateY(0);
-            /* Animáció csak a láthatóvá váláskor */
+            /* Animate only when becoming visible */
             animation: fadeInScale 0.6s ease-out; 
         }
 
-        /* === Vissza gomb === */
+        /* === Back Button === */
         .back-button-wrapper {
             grid-row: 1 / 2;
             grid-column: 1 / 2;
@@ -176,7 +244,7 @@
             pointer-events: none;
             transition: opacity 0.3s ease-out;
             width: 100%;
-            max-width: 750px; /* Igazodik a tartalomhoz */
+            max-width: 750px; /* Aligns with content */
             margin: 0 auto;
         }
         .back-button-wrapper.is-visible {
@@ -212,7 +280,7 @@
             transform: translateX(-3px);
         }
 
-        /* === Loader animáció === */
+        /* === Loader Animation === */
         @keyframes rotatingLoader {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -239,7 +307,7 @@
                          pulseOrange 2s ease-out infinite 0.5s;
         }
 
-        /* === Reszponzív töréspontok === */
+        /* === Responsive === */
         @media (max-width: 650px) {
             .step-title, #loading-step h1 {
                 font-size: 1.8rem;
@@ -254,7 +322,7 @@
                 font-size: 0.95rem;
                 height: 45px;
             }
-            #loading-step p {
+            #loading-step p, .step-subtitle {
                 font-size: 1rem;
             }
             .loader {
@@ -264,7 +332,7 @@
         }
         @media (max-width: 400px) {
              .user-grid, .language-grid {
-                 grid-template-columns: 1fr; /* Egy oszlop mobilon */
+                 grid-template-columns: 1fr; /* Single column on mobile */
             }
         }
 
@@ -304,12 +372,20 @@
         </div>
     </div>
 
+    <div id="domain-step" class="step-content">
+        <h1 class="step-title">Which webshop do you want to analyze?</h1>
+        <p class="step-subtitle">Please enter the full URL of the webshop.</p>
+        <input type="url" id="domain-input" class="text-input" placeholder="https://www.yourshop.com">
+        <br>
+        <button id="generate-btn" class="action-btn">Generate</button>
+    </div>
+
     <div id="loading-step" class="step-content">
-        <h1 id="status-title">Generálás folyamatban...</h1>
+        <h1 id="status-title">Generating...</h1>
         <p id="status-text">
-            A személyre szabott elemzésed készül. Ne aggódj, az oldal automatikusan frissülni fog, amint elkészült.
+            Your personalized analysis is being prepared. Don't worry, the page will refresh automatically once it's ready.
         </p>
-        <p>Addig főzz egy kávét! 😊☕</p>
+        <p>Go grab a coffee! 😊☕</p>
         
         <div class="loader-wrapper">
             <div class="loader"></div>
@@ -320,31 +396,37 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- Beállítások ---
+            // --- Settings ---
             const WEBHOOK_BASE_URL = "https://n8n.onsiteretargeting.com/webhook/demo-generation";
-            const REDIRECT_URL = 'index.html'; // A célfájl, amit az n8n generál
-            const FINAL_PAGE_KEY = 'data-placeholder="pageTitle"'; // Ezt keressük a kész fájlban
-            const POLLING_INTERVAL = 5000; // 5 másodpercenként ellenőriz
-            const INITIAL_DELAY = 3000; // Első ellenőrzés 3 mp múlva
+            const REDIRECT_URL = 'index.html';
+            const FINAL_PAGE_KEY = 'data-placeholder="pageTitle"';
+            const POLLING_INTERVAL = 5000;
+            const INITIAL_DELAY = 3000;
 
-            // --- Változók ---
+            // --- State Variables ---
             let selectedPerson = null; 
+            let selectedLanguage = null;
             let activeUserButton = null;
+            let activeLanguageButton = null;
 
-            // --- DOM Elemek ---
+            // --- DOM Elements ---
             const personStep = document.getElementById('person-step');
             const languageStep = document.getElementById('language-step');
+            const domainStep = document.getElementById('domain-step');
             const loadingStep = document.getElementById('loading-step');
             const backButtonWrapper = document.getElementById('back-button-wrapper');
             
             const allUserButtons = document.querySelectorAll('.user-btn');
             const allLanguageLinks = document.querySelectorAll('.language-link');
             const backBtn = document.getElementById('back-btn');
+            
+            const domainInput = document.getElementById('domain-input');
+            const generateBtn = document.getElementById('generate-btn');
 
             const statusTitle = document.getElementById('status-title');
             const statusText = document.getElementById('status-text');
 
-            // --- 1. LÉPÉS: ELŐADÓ VÁLASZTÁSA ---
+            // --- STEP 1: CHOOSE PERSON ---
             allUserButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     selectedPerson = button.dataset.personValue;
@@ -355,7 +437,7 @@
                     activeUserButton = button;
                     activeUserButton.classList.add('active');
 
-                    // JAVÍTVA: Váltás a 2. lépésre .is-visible használatával
+                    // Go to Step 2
                     personStep.classList.remove('is-visible');
                     setTimeout(() => { 
                         languageStep.classList.add('is-visible');
@@ -364,93 +446,127 @@
                 });
             });
             
-            // --- VISSZA GOMB: 2. LÉPÉSRŐL AZ 1.-RE ---
-            backBtn.addEventListener('click', () => {
-                // JAVÍTVA: .is-visible használatával
-                languageStep.classList.remove('is-visible');
-
-                backButtonWrapper.classList.remove('is-visible');
-                setTimeout(() => { 
-                    personStep.classList.add('is-visible');
-                }, 300);
-
-                if (activeUserButton) {
-                    activeUserButton.classList.remove('active');
-                    activeUserButton = null;
-                }
-                selectedPerson = null; 
-            });
-
-            // --- 2. LÉPÉS: NYELV VÁLASZTÁSA ---
+            // --- STEP 2: CHOOSE LANGUAGE ---
             allLanguageLinks.forEach(button => {
                 button.addEventListener('click', () => {
-                    if (!selectedPerson) return; // Biztonsági ellenőrzés
+                    selectedLanguage = button.dataset.langValue;
 
-                    const selectedLanguage = button.dataset.langValue;
-                    
-                    // A DINAMIKUS URL LÉTREHOZÁSA MEGMARADT
-                    const finalWebhookUrl = `${WEBHOOK_BASE_URL}?person=${selectedPerson}&language=${selectedLanguage}`;
-
-                    // JAVÍTVA: Váltás a 3. (Töltő) lépésre .is-visible használatával
-                    languageStep.classList.remove('is-visible');
-                    backButtonWrapper.classList.remove('is-visible'); // Vissza gomb elrejtése
-                    
-                    setTimeout(() => {
-                        loadingStep.classList.add('is-visible');
-                    }, 300);
-
-                    // 1. Webhook indítása a háttérben
-                    // Ez a logika változatlan maradt
-                    try {
-                        fetch(finalWebhookUrl, { mode: 'no-cors' }); 
-                    } catch (error) {
-                        console.warn("Webhook trigger hiba (no-cors mód miatt ez várható):", error);
+                    if (activeLanguageButton) {
+                        activeLanguageButton.classList.remove('active');
                     }
-
-                    // 2. Polling (státusz ellenőrzés) indítása
-                    // Ez a logika is változatlan maradt
-                    startPolling(REDIRECT_URL);
+                    activeLanguageButton = button;
+                    activeLanguageButton.classList.add('active');
+                    
+                    // Go to Step 3
+                    languageStep.classList.remove('is-visible');
+                    setTimeout(() => {
+                        domainStep.classList.add('is-visible');
+                        domainInput.focus(); // Focus the input field
+                    }, 300);
                 });
             });
 
-            // --- 3. LÉPÉS: POLLING (VÁRAKOZÁS) LOGIKA ---
-            // Ez a rész teljesen változatlan maradt
+            // --- STEP 3: ENTER DOMAIN & GENERATE ---
+            generateBtn.addEventListener('click', () => {
+                const selectedDomain = domainInput.value;
 
+                // Simple validation
+                if (!selectedDomain || selectedDomain.trim() === '' || !selectedDomain.includes('.')) {
+                    alert('Please enter a valid webshop URL.');
+                    return;
+                }
+                
+                // Disable button to prevent double-clicks
+                generateBtn.disabled = true;
+                generateBtn.textContent = 'Generating...';
+
+                // Build the final webhook URL
+                const finalWebhookUrl = `${WEBHOOK_BASE_URL}?person=${selectedPerson}&language=${selectedLanguage}&domain=${encodeURIComponent(selectedDomain)}`;
+
+                // Go to Step 4 (Loading)
+                domainStep.classList.remove('is-visible');
+                backButtonWrapper.classList.remove('is-visible'); // Hide back button
+                
+                setTimeout(() => {
+                    loadingStep.classList.add('is-visible');
+                }, 300);
+
+                // 1. Trigger Webhook
+                try {
+                    fetch(finalWebhookUrl, { mode: 'no-cors' }); 
+                } catch (error) {
+                    console.warn("Webhook trigger error (this is expected in 'no-cors' mode):", error);
+                }
+
+                // 2. Start Polling
+                startPolling(REDIRECT_URL);
+            });
+
+            // --- BACK BUTTON LOGIC (Handles all steps) ---
+            backBtn.addEventListener('click', () => {
+                // If on Domain Step (3), go back to Language (2)
+                if (domainStep.classList.contains('is-visible')) {
+                    domainStep.classList.remove('is-visible');
+                    setTimeout(() => {
+                        languageStep.classList.add('is-visible');
+                    }, 300);
+                    // De-select language
+                    if (activeLanguageButton) {
+                        activeLanguageButton.classList.remove('active');
+                        activeLanguageButton = null;
+                    }
+                    selectedLanguage = null;
+                }
+                // If on Language Step (2), go back to Person (1)
+                else if (languageStep.classList.contains('is-visible')) {
+                    languageStep.classList.remove('is-visible');
+                    backButtonWrapper.classList.remove('is-visible'); // Hide back button on first step
+                    setTimeout(() => { 
+                        personStep.classList.add('is-visible');
+                    }, 300);
+                    // De-select person
+                    if (activeUserButton) {
+                        activeUserButton.classList.remove('active');
+                        activeUserButton = null;
+                    }
+                    selectedPerson = null; 
+                }
+            });
+
+
+            // --- STEP 4: POLLING LOGIC ---
             function startPolling(destinationUrl) {
-                // Az ellenőrzés indítása X másodperc késleltetéssel
                 setTimeout(() => checkStatus(destinationUrl), INITIAL_DELAY);
             }
             
             function checkStatus(destinationUrl) {
-                // Cache-törlő trükk
                 const urlToFetch = destinationUrl + '?t=' + new Date().getTime();
 
                 fetch(urlToFetch, { cache: "no-store" })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Hálózati hiba: ' + response.statusText);
+                            throw new Error('Network error: ' + response.statusText);
                         }
                         return response.text();
                     })
                     .then(html => {
-                        // SIKER: Ha a letöltött HTML tartalmazza a kulcsszót
                         if (html.includes(FINAL_PAGE_KEY)) {
-                            if (statusTitle) statusTitle.textContent = 'Siker! Átirányítás...';
-                            if (statusText) statusText.textContent = 'Az elemzésed elkészült, egy pillanat és mutatom.';
+                            // SUCCESS
+                            if (statusTitle) statusTitle.textContent = 'Success! Redirecting...';
+                            if (statusText) statusText.textContent = 'Your analysis is ready. We are redirecting you now.';
                             
-                            // Átirányítás a VÉGSŐ oldalra
                             setTimeout(() => {
                                 window.location.href = destinationUrl; 
                             }, 1000); 
 
                         } else {
-                            // MÉG NEM KÉSZ: Várunk és újrapróbáljuk
+                            // NOT YET: Poll again
                             setTimeout(() => checkStatus(destinationUrl), POLLING_INTERVAL);
                         }
                     })
                     .catch(error => {
-                        // HIBA ESETÉN: Várunk és újrapróbáljuk
-                        console.error("Hiba az ellenőrzés során:", error);
+                        // ERROR: Poll again
+                        console.error("Error during polling:", error);
                         setTimeout(() => checkStatus(destinationUrl), POLLING_INTERVAL);
                     });
             }
