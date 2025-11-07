@@ -397,11 +397,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             
             // --- Settings ---
-            const WEBHOOK_BASE_URL = "https://n8n.onsiteretargeting.com/webhook/demo-generation";
-            const REDIRECT_URL = 'index.html';
-            const FINAL_PAGE_KEY = 'data-placeholder="pageTitle"';
-            const POLLING_INTERVAL = 15000;
-            const INITIAL_DELAY = 60000;
+            const WEBHOOK_BASE_URL = "https://n8n.onsiteretargeting.com/webhook/demo-generation";
+            // const REDIRECT_URL = 'index.html'; // Erre már nincs szükség, törölheted vagy kikommentelheted
+            const REPO_BASE_URL = 'https://thisisoptimonk.github.io/'; // <-- ÍGY ADD HOZZÁ EZT AZ ÚJ SORT
+            const FINAL_PAGE_KEY = 'data-placeholder="pageTitle"';
+            const POLLING_INTERVAL = 15000;
+            const INITIAL_DELAY = 60000;
 
             // --- State Variables ---
             let selectedPerson = null; 
@@ -503,9 +504,13 @@
                     console.warn("Webhook trigger error:", error);
                 }
 
-                // 2. Start Polling (EZ A RÉSZ VÁLTOZATLAN)
-                startPolling(REDIRECT_URL);
-            });
+                // 2. Start Polling (JAVÍTVA: Dinamikus URL képzése)
+                // Itt összerakjuk az új URL-t a 'selectedPerson' (pl. "csilla") alapján
+                const dynamicRedirectUrl = `${REPO_BASE_URL}${selectedPerson}/index.html`;
+
+                // A pollingot már az új, dinamikus URL-lel indítjuk
+                startPolling(dynamicRedirectUrl);
+            });
 
             // --- BACK BUTTON LOGIC (Handles all steps) ---
             backBtn.addEventListener('click', () => {
@@ -580,6 +585,7 @@
 
 </body>
 </html>
+
 
 
 
