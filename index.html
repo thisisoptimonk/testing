@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-placeholder="pageTitle">OptiMonk Ajánlat</title>
+<meta name="description" content="Személyre szabott konverziónövelő stratégia webáruházak számára.">
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+:root {
+--color-primary: #FF6B35;
+--color-secondary: #000000;
+--color-dark: #ffffff;
+--color-primary-rgb: 255, 107, 53;
+--color-secondary-rgb: 0, 0, 0;
+--color-dark-rgb: 255, 255, 255;
+}
+
+/* === HÁTTÉR === */
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+/* === JAVÍTÁS: A body-ra CSAK a linear-gradient kerül === */
+/* Ez a színátmenet az oldal tetejétől (0%) az aljáig (100%) tart és GÖRGETHETŐ */
+background-image: linear-gradient(
+to bottom,
+var(--color-dark) -50%,
+rgba(var(--color-primary-rgb), 0.6) 130%
+);
+background-attachment: scroll; /* Ez görgődik az oldallal */
+
+min-height: 100vh;
+color: var(--color-secondary);
+line-height: 1.6;
+overflow-x: hidden;
+}
+
+.gradient-bg {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+height: 400px; /* A hegyek magassága */
+z-index: -1; /* A tartalom mögé kerül */
+
+/* Ezen a DIV-en CSAK a hegyek vannak */
+background-image:
+radial-gradient(ellipse 100% 50% at 50% 0%, rgba(220, 220, 220, 0.3) 0%, transparent 60%),
+radial-gradient(ellipse 90% 40% at 45% 0%, rgba(200, 200, 200, 0.2) 0%, transparent 70%),
+radial-gradient(ellipse 120% 45% at 55% 0%, rgba(200, 200, 200, 0.15) 0%, transparent 80%);
+
+background-repeat: no-repeat;
+background-position: top center; /* Mindháromra érvényes */
+background-size: 100% 250px, 100% 300px, 100% 350px;
+}
+
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 1.5rem;
+}
+
+.glass-card {
+background: rgba(var(--color-dark-rgb), 0.7);
+backdrop-filter: blur(20px);
+border: 1px solid rgba(var(--color-dark-rgb), 0.2);
+border-radius: 24px;
+padding: 2rem;
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+box-shadow: 0 8px 20px rgba(var(--color-secondary-rgb), 0.05);
+}
+
+.glass-card:hover {
+transform: translateY(-8px);
+border-color: var(--color-primary);
+box-shadow: 0 20px 60px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.analysis-section {
+padding-top: 6rem;
+padding-bottom: 2rem;
+}
+
+.analysis-box {
+background: var(--color-dark);
+border: 1px solid rgba(var(--color-secondary-rgb), 0.1);
+border-radius: 16px;
+padding: 2rem;
+box-shadow: 0 10px 30px rgba(var(--color-secondary-rgb), 0.05);
+}
+
+.analysis-box h2 {
+font-size: 1.5rem;
+margin-bottom: 1rem;
+color: var(--color-primary);
+}
+
+.analysis-box p, .analysis-box ul {
+font-size: 1.125rem;
+color: rgba(var(--color-secondary-rgb), 0.8);
+line-height: 1.7;
+}
+.analysis-box ul {
+padding-left: 1.5rem;
+margin-top: 1rem;
+}
+
+.analysis-box p strong {
+color: var(--color-secondary);
+}
+
+.hero {
+min-height: 90vh;
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+padding: 6rem 1.5rem 4rem;
+position: relative;
+}
+
+.hero-content {
+max-width: 900px;
+}
+
+.badge {
+display: inline-block;
+padding: 0.5rem 1.5rem;
+background: rgba(var(--color-primary-rgb), 0.1);
+border: 1px solid var(--color-primary);
+border-radius: 50px;
+font-size: 0.875rem;
+font-weight: 600;
+color: var(--color-primary);
+margin-bottom: 2rem;
+animation: fadeInDown 0.8s ease-out;
+}
+
+.hero h1 {
+font-size: clamp(2.5rem, 6vw, 4.5rem);
+font-weight: 800;
+line-height: 1.1;
+margin-bottom: 1.5rem;
+background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero p {
+font-size: 1.25rem;
+color: rgba(var(--color-secondary-rgb), 0.7);
+max-width: 700px;
+margin: 0 auto 3rem;
+animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.hero-buttons {
+display: flex;
+gap: 1rem;
+justify-content: center;
+flex-wrap: wrap;
+animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.btn {
+display: inline-flex;
+align-items: center;
+gap: 0.5rem;
+padding: 1rem 2rem;
+font-size: 1rem;
+font-weight: 600;
+text-decoration: none;
+border-radius: 12px;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+cursor: pointer;
+border: 2px solid transparent;
+}
+
+.btn-primary {
+background: var(--color-primary);
+color: var(--color-dark);
+box-shadow: 0 10px 30px rgba(var(--color-primary-rgb), 0.3);
+}
+
+.btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 15px 40px rgba(var(--color-primary-rgb), 0.4);
+}
+
+.btn-outline {
+background: transparent;
+border-color: rgba(var(--color-secondary-rgb), 0.2);
+color: var(--color-secondary);
+}
+
+.btn-outline:hover {
+border-color: var(--color-primary);
+background: rgba(var(--color-primary-rgb), 0.1);
+}
+
+.btn-ghost {
+background: rgba(var(--color-secondary-rgb), 0.1);
+color: var(--color-secondary);
+}
+
+.btn-ghost:hover {
+background: rgba(var(--color-secondary-rgb), 0.15);
+}
+
+section {
+padding: 6rem 1.5rem;
+position: relative;
+}
+
+.section-header {
+text-align: center;
+max-width: 800px;
+margin: 0 auto 4rem;
+}
+
+.section-label {
+display: inline-block;
+padding: 0.5rem 1rem;
+background: rgba(var(--color-primary-rgb), 0.1);
+border: 1px solid rgba(var(--color-secondary-rgb), 0.1);
+border-radius: 50px;
+font-size: 0.875rem;
+font-weight: 600;
+color: var(--color-primary);
+margin-bottom: 1rem;
+}
+
+.section-title {
+font-size: clamp(2rem, 4vw, 3rem);
+font-weight: 800;
+margin-bottom: 1rem;
+line-height: 1.2;
+}
+
+.section-description {
+font-size: 1.125rem;
+color: rgba(var(--color-secondary-rgb), 0.7);
+max-width: 600px;
+margin: 0 auto;
+}
+
+.logo-cloud-section {
+padding-top: 2rem;
+padding-bottom: 4rem;
+}
+.logo-cloud-header {
+text-align: center;
+font-weight: 600;
+color: rgba(var(--color-secondary-rgb), 0.6);
+font-size: 0.875rem;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+margin-bottom: 2.5rem;
+}
+.logo-cloud-container {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+gap: 3rem;
+}
+.logo-cloud-container img {
+max-height: 40px;
+filter: grayscale(100%);
+opacity: 0.7;
+transition: all 0.3s;
+}
+.logo-cloud-container img:hover {
+filter: grayscale(0%);
+opacity: 1;
+}
+
+.problems-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 2rem;
+margin-top: 4rem;
+}
+.problem-card {
+text-align: center;
+position: relative;
+cursor: pointer;
+}
+.icon-wrapper {
+width: 4rem;
+height: 4rem;
+margin: 0 auto 1.5rem;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 16px;
+background: rgba(var(--color-primary-rgb), 0.15);
+position: relative;
+}
+.icon-wrapper::before {
+content: '';
+position: absolute;
+inset: -2px;
+border-radius: 16px;
+padding: 2px;
+background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+-webkit-mask-composite: xor;
+mask-composite: exclude;
+opacity: 0;
+transition: opacity 0.3s;
+}
+.glass-card:hover .icon-wrapper::before {
+opacity: 1;
+}
+.icon {
+width: 2rem;
+height: 2rem;
+color: var(--color-primary);
+}
+.problem-card h3 {
+font-size: 1.25rem;
+font-weight: 700;
+margin-bottom: 0.5rem;
+}
+.problem-card p {
+color: rgba(var(--color-secondary-rgb), 0.7);
+}
+
+.solutions-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 2rem;
+margin-top: 4rem;
+}
+.solution-card {
+position: relative;
+overflow: hidden;
+cursor: pointer;
+}
+.solution-card .icon-wrapper {
+margin-bottom: 1.5rem;
+}
+.solution-card h3 {
+font-size: 1.25rem;
+font-weight: 700;
+margin-bottom: 0.75rem;
+}
+.solution-card p {
+color: rgba(var(--color-secondary-rgb), 0.7);
+font-size: 0.95rem;
+}
+
+.how-it-works-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 2rem;
+margin-top: 4rem;
+}
+.step-card {
+position: relative;
+padding-top: 3.5rem;
+}
+.step-card h3 {
+font-size: 1.25rem;
+font-weight: 700;
+margin-bottom: 0.75rem;
+}
+.step-card p {
+color: rgba(var(--color-secondary-rgb), 0.7);
+font-size: 0.95rem;
+}
+.step-number {
+position: absolute;
+top: 1.5rem;
+left: 2rem;
+font-size: 2rem;
+font-weight: 800;
+color: var(--color-primary);
+opacity: 0.5;
+}
+
+.testimonial-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 2rem;
+margin-top: 4rem;
+}
+.testimonial-card p.testimonial-text {
+font-size: 1.125rem;
+font-style: italic;
+margin-bottom: 2rem;
+color: rgba(var(--color-secondary-rgb), 0.8);
+position: relative;
+padding-left: 2rem;
+}
+.testimonial-card p.testimonial-text::before {
+content: '“';
+position: absolute;
+left: 0;
+top: -0.5rem;
+font-size: 3rem;
+color: var(--color-primary);
+opacity: 0.6;
+}
+.testimonial-author-wrapper {
+display: flex;
+align-items: center;
+gap: 1rem;
+}
+.testimonial-author-wrapper img {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+border: 2px solid rgba(var(--color-secondary-rgb), 0.1);
+}
+.testimonial-author-wrapper cite {
+font-weight: 600;
+font-style: normal;
+color: var(--color-secondary);
+}
+.testimonial-author-wrapper cite span {
+display: block;
+font-weight: 400;
+font-size: 0.875rem;
+color: rgba(var(--color-secondary-rgb), 0.7);
+}
+
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 2rem;
+margin-top: 4rem;
+}
+.stat-card {
+text-align: center;
+}
+.stat-number {
+font-size: 3.5rem;
+font-weight: 800;
+background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+margin-bottom: 0.5rem;
+line-height: 1;
+}
+.stat-label {
+color: rgba(var(--color-secondary-rgb), 0.7);
+font-size: 1rem;
+}
+
+.cta-section {
+text-align: center;
+padding: 8rem 1.5rem;
+position: relative;
+}
+.cta-content {
+max-width: 700px;
+margin: 0 auto;
+padding: 4rem 2rem;
+background: rgba(var(--color-dark-rgb), 0.7);
+border-radius: 32px;
+border: 1px solid rgba(var(--color-dark-rgb), 0.2);
+backdrop-filter: blur(20px);
+}
+.cta-content h2 {
+font-size: clamp(2rem, 4vw, 3rem);
+font-weight: 800;
+margin-bottom: 1rem;
+}
+.cta-content p {
+font-size: 1.125rem;
+color: rgba(var(--color-secondary-rgb), 0.7);
+margin-bottom: 2rem;
+}
+
+@keyframes fadeInDown {
+from { opacity: 0; transform: translateY(-30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.scroll-reveal {
+opacity: 0;
+transform: translateY(30px);
+transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.scroll-reveal.revealed {
+opacity: 1;
+transform: translateY(0);
+}
+
+.om-campaign {
+position: fixed;
+inset: 0;
+display: none;
+align-items: center;
+justify-content: center;
+z-index: 10000;
+}
+.om-campaign.active {
+display: flex;
+}
+.om-overlay {
+position: absolute;
+inset: 0;
+background: rgba(var(--color-secondary-rgb), 0.7);
+backdrop-filter: blur(12px);
+}
+.om-popup {
+position: relative;
+background: var(--color-dark);
+border-radius: 24px;
+overflow: hidden;
+width: 90%;
+max-width: 900px;
+box-shadow: 0 25px 50px -12px rgba(var(--color-secondary-rgb), 0.5);
+animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.om-popup-inner {
+display: grid;
+grid-template-columns: 1fr 1fr;
+align-items: center;
+min-height: 500px;
+}
+/* ÚJ: Egyoszlopos popup belső */
+.om-popup-inner-single {
+display: block;
+min-height: auto;
+text-align: center;
+}
+.om-left {
+padding: 3rem 2.5rem;
+}
+
+/* === KÉP STÍLUSOK === */
+
+.om-right {
+position: relative;
+background: rgba(var(--color-primary-rgb), 0.05);
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 0;
+height: 100%;
+/* FONTOS: Az overflow innen lekerül, hogy a panneren legyen */
+}
+
+.om-image-panner {
+width: 100%;
+height: 100%;
+overflow: hidden; /* EZ A LÉNYEG: Ez vágja le a képet */
+position: relative; /* Pozicionálási alap a gombokhoz */
+}
+.om-product-img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+object-position: center center;
+border-radius: 0;
+box-shadow: none;
+/* A transformot mozgatja a JS */
+transform: translate(0, 0);
+transition: object-fit 0.3s ease; /* A transform animációt kivesszük, hogy a húzás ne akadjon */
+user-select: none;
+-webkit-user-drag: none;
+}
+
+.om-product-img.is-draggable {
+cursor: grab;
+}
+.om-product-img.is-dragging {
+cursor: grabbing;
+}
+
+.om-image-controls {
+position: absolute;
+bottom: 1rem;
+right: 1rem;
+z-index: 5;
+display: flex;
+gap: 0.5rem;
+}
+
+.om-image-btn {
+background: rgba(0, 0, 0, 0.6);
+color: #ffffff;
+border: none;
+border-radius: 50%;
+width: 32px;
+height: 32px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.2s;
+backdrop-filter: blur(5px);
+}
+
+.om-image-btn:hover {
+background: rgba(0, 0, 0, 0.8);
+transform: scale(1.1);
+}
+
+.om-image-swap-btn:hover {
+transform: scale(1.1) rotate(90deg);
+}
+
+/* === KÉP GOMBOK VÉGE === */
+
+.om-close {
+position: absolute;
+top: 1.5rem;
+right: 1.5rem;
+width: 40px;
+height: 40px;
+background: rgba(255, 255, 255, 0.1);
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+color: var(--color-secondary);
+font-size: 1.5rem;
+transition: all 0.3s;
+z-index: 10;
+}
+
+.om-close:hover {
+background: rgba(255, 255, 255, 0.3);
+transform: rotate(90deg);
+}
+
+.om-brand {
+margin-bottom: 1.5rem;
+}
+
+.om-brand img {
+max-height: 35px;
+width: 70%;
+padding: 0.5rem;
+border-radius: 20px;
+}
+
+.om-title {
+font-size: 2.5rem;
+font-weight: 800;
+margin-bottom: 1rem;
+color: var(--color-secondary);
+line-height: 1.2;
+}
+.om-text {
+font-size: 1.125rem;
+color: rgba(var(--color-secondary-rgb), 0.7);
+margin-bottom: 2rem;
+line-height: 1.6;
+}
+.om-input {
+width: 100%;
+padding: 1rem 1.25rem;
+border: 1px solid rgba(var(--color-secondary-rgb), 0.1);
+border-radius: 12px;
+margin-bottom: 1rem;
+font-size: 1rem;
+background: rgba(var(--color-secondary-rgb), 0.05);
+color: var(--color-secondary);
+transition: all 0.3s;
+}
+.om-input:focus {
+outline: none;
+border-color: var(--color-primary);
+background: rgba(var(--color-secondary-rgb), 0.08);
+}
+.om-button {
+width: 100%;
+padding: 1.125rem 2rem;
+background: var(--color-primary);
+color: var(--color-dark);
+font-weight: 700;
+font-size: 1rem;
+border: none;
+border-radius: 12px;
+cursor: pointer;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+transition: all 0.3s;
+box-shadow: 0 10px 30px rgba(var(--color-primary-rgb), 0.3);
+}
+.om-button:hover {
+transform: translateY(-2px);
+box-shadow: 0 15px 40px rgba(var(--color-primary-rgb), 0.4);
+}
+.om-logo {
+font-size: 1.125rem;
+font-weight: 700;
+color: var(--color-primary);
+margin-bottom: 1.5rem;
+letter-spacing: 0.05em;
+}
+.om-subtitle {
+font-size: 1rem;
+color: rgba(var(--color-secondary-rgb), 0.7);
+margin-bottom: 2rem;
+}
+.om-products {
+background: rgba(var(--color-primary-rgb), 0.1);
+border: 1px solid rgba(var(--color-secondary-rgb), 0.1);
+border-radius: 12px;
+padding: 1.5rem;
+margin-bottom: 1.5rem;
+}
+.om-product {
+font-size: 0.95rem;
+color: var(--color-secondary);
+margin-bottom: 0.75rem;
+font-weight: 500;
+}
+.om-product:last-child {
+margin-bottom: 0;
+}
+.om-urgency {
+background: rgba(var(--color-primary-rgb), 0.1);
+color: var(--color-secondary);
+border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+padding: 1rem 1.25rem;
+border-radius: 12px;
+font-weight: 600;
+margin-bottom: 1.5rem;
+text-align: center;
+}
+
+/* ÚJ: Szerencsekerék kép */
+.om-wheel-img {
+max-width: 250px;
+margin: 0 auto 1.5rem auto;
+}
+
+/* ÚJ: Visszaszámláló demó */
+.om-timer {
+font-size: 3rem;
+font-weight: 800;
+color: var(--color-primary);
+margin-bottom: 1rem;
+padding: 0.5rem 1rem;
+background: rgba(var(--color-primary-rgb), 0.1);
+border-radius: 12px;
+display: inline-block;
+}
+
+.om-nav-btn {
+position: fixed;
+top: 50%;
+transform: translateY(-50%);
+width: 50px;
+height: 50px;
+border-radius: 12px;
+background: var(--color-primary);
+border: none;
+cursor: pointer;
+display: none; /* 🚩 JAVÍTÁS: Alapból legyen rejtett */
+align-items: center;
+justify-content: center;
+z-index: 10001;
+transition: all 0.3s;
+box-shadow: 0 4px 12px rgba(var(--color-secondary-rgb), 0.3);
+opacity: 0.8;
+}
+.om-nav-btn:hover {
+background: var(--color-primary);
+border-color: var(--color-primary);
+transform: translateY(-50%) scale(1.1);
+box-shadow: 0 8px 20px rgba(var(--color-primary-rgb), 0.4);
+}
+.om-nav-btn svg {
+color: var(--color-secondary);
+transition: color 0.3s;
+}
+.om-nav-btn:hover svg {
+color: var(--color-dark);
+}
+.om-nav-prev {
+left: 2rem;
+}
+.om-nav-next {
+right: 2rem;
+}
+
+@keyframes scaleIn {
+from { transform: scale(0.9); opacity: 0; }
+to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+.om-popup-inner {
+grid-template-columns: 1fr;
+}
+/* ÚJ: Az egyoszlopos popupok mobilon is jól néznek ki */
+.om-popup-inner-single {
+grid-template-columns: 1fr;
+padding-top: 4rem; /* Hely a bezáró gombnak */
+}
+.solutions-grid {
+grid-template-columns: 1fr;
+}
+.om-right {
+display: none;
+}
+.om-left {
+padding: 2.5rem 1.5rem;
+}
+.om-nav-btn {
+width: 48px;
+height: 48px;
+}
+.om-nav-prev {
+left: 1rem;
+}
+.om-nav-next {
+right: 1rem;
+}
+.logo-cloud-container {
+gap: 2rem;
+}
+.logo-cloud-container img {
+max-height: 30px;
+}
+}
+
+/* === MODÁL STÍLUSOK (Probléma & Megoldás) === */
+.om-modal {
+position: fixed;
+inset: 0;
+display: none;
+align-items: center;
+justify-content: center;
+z-index: 20000;
+}
+.om-modal.active {
+display: flex;
+}
+
+.om-modal-overlay {
+position: absolute;
+inset: 0;
+background: rgba(var(--color-secondary-rgb), 0.7);
+backdrop-filter: blur(12px);
+}
+
+.om-modal-content {
+position: relative;
+background: var(--color-dark);
+border-radius: 24px;
+padding: 3rem;
+width: 90%;
+max-width: 650px;
+box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.om-modal-close {
+position: absolute;
+top: 1rem;
+right: 1rem;
+width: 32px;
+height: 32px;
+background: rgba(var(--color-secondary-rgb), 0.1);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+color: var(--color-secondary);
+font-size: 1.25rem;
+transition: all 0.3s;
+}
+.om-modal-close:hover {
+background: rgba(var(--color-secondary-rgb), 0.2);
+transform: rotate(90deg);
+}
+
+.om-modal-icon {
+width: 3.5rem;
+height: 3.5rem;
+margin-bottom: 1.5rem;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 16px;
+background: rgba(var(--color-primary-rgb), 0.15);
+}
+.om-modal-icon .icon {
+width: 1.75rem;
+height: 1.75rem;
+color: var(--color-primary);
+}
+
+.om-modal-content h2 {
+font-size: 1.75rem;
+font-weight: 700;
+margin-bottom: 1rem;
+color: var(--color-secondary);
+}
+
+.om-modal-body {
+font-size: 1rem;
+line-height: 1.7;
+color: rgba(var(--color-secondary-rgb), 0.7);
+}
+
+.om-modal-body h3 {
+font-size: 1.125rem;
+font-weight: 700;
+color: var(--color-primary);
+margin-top: 1.5rem;
+margin-bottom: 0.5rem;
+}
+.om-modal-body p {
+margin-bottom: 1rem;
+}
+
+/* === 🚩 JAVÍTOTT: SZERENCSEKERÉK STÍLUSOK (Teljesen fehér) === */
+
+.om-wheel-img {
+display: none;
+}
+
+.om-spin-wheel-popup {
+max-width: 900px;
+background: var(--color-dark); /* JAVÍTVA: Visszaállítva fehérre */
+box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); /* JAVÍTVA: Visszaállítva az árnyék */
+color: var(--color-secondary);
+}
+
+.om-spin-wheel-inner {
+display: grid;
+grid-template-columns: 1fr 1fr;
+min-height: 550px;
+align-items: center;
+}
+
+/* Bal oldal (Kerék) */
+.om-spin-wheel-left {
+display: flex;
+align-items: center;
+justify-content: left;
+margin-left: -7rem;
+background: var(--color-dark); /* JAVÍTVA: Fehér háttér */
+height: 100%;
+border-radius: 24px 0 0 24px;
+position: relative;
+z-index: 1;
+}
+
+.css-wheel-container {
+position: relative; /* JAVÍTVA: Visszaállítva relatívra */
+/* Törölve az abszolút pozicionálás */
+transform: none;
+
+width: 550px; /* Visszaállítva kisebbre */
+height: 550px;
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 3;
+}
+
+.wheel-pointer {
+position: absolute;
+top: -10px;
+left: 50%;
+transform: translateX(-50%);
+width: 0;
+height: 0;
+border-left: 20px solid transparent;
+border-right: 20px solid transparent;
+border-top: 30px solid var(--color-primary);
+z-index: 5;
+filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+}
+
+.css-wheel {
+width: 100%;
+height: 100%;
+border-radius: 50%;
+border: 10px solid var(--color-secondary); /* JAVÍTVA: Fekete keret (jól látszik fehéren) */
+background: conic-gradient(
+var(--color-primary) 0deg 45deg,
+var(--color-secondary) 45deg 90deg,
+var(--color-primary) 90deg 135deg,
+var(--color-secondary) 135deg 180deg,
+var(--color-primary) 180deg 225deg,
+var(--color-secondary) 225deg 270deg,
+var(--color-primary) 270deg 315deg,
+var(--color-secondary) 315deg 360deg
+);
+box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+z-index: 4;
+}
+
+.wheel-inner-circle {
+position: absolute;
+width: 60px;
+height: 60px;
+background: var(--color-dark);
+border-radius: 50%;
+border: 5px solid var(--color-secondary);
+z-index: 5;
+}
+
+/* Jobb oldal (Szöveg) */
+.om-spin-wheel-right {
+background: transparent; /* JAVÍTVA: A háttér már a popupé */
+height: 100%;
+padding: 3rem 2.5rem;
+text-align: left;
+border-radius: 0; /* JAVÍTVA */
+z-index: 2;
+box-shadow: none; /* JAVÍTVA */
+}
+
+.om-spin-wheel-right .om-brand {
+margin-bottom: 1.5rem;
+}
+
+.om-spin-wheel-right .om-title {
+font-size: clamp(2rem, 4vw, 2.75rem);
+margin-bottom: 1.5rem;
+line-height: 1.2;
+color: var(--color-secondary);
+}
+
+.om-spin-wheel-right .om-text {
+font-size: 1rem;
+margin-bottom: 2rem;
+color: rgba(var(--color-secondary-rgb), 0.8);
+}
+
+.om-spin-wheel-input {
+background: rgba(var(--color-secondary-rgb), 0.05);
+border-color: rgba(var(--color-secondary-rgb), 0.1);
+color: var(--color-secondary);
+}
+.om-spin-wheel-input:focus {
+border-color: var(--color-primary);
+}
+
+.om-spin-wheel-button {
+margin-bottom: 1.5rem;
+}
+
+.om-secondary-button {
+display: block;
+width: 100%;
+padding: 0.8rem 1.5rem;
+background: transparent;
+color: rgba(var(--color-secondary-rgb), 0.7);
+border: none;
+font-size: 0.9rem;
+font-weight: 600;
+cursor: pointer;
+transition: color 0.3s;
+text-align: center;
+}
+.om-secondary-button:hover {
+color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+.om-spin-wheel-popup {
+background: var(--color-dark);
+box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+}
+.om-spin-wheel-inner {
+grid-template-columns: 1fr;
+min-height: auto;
+}
+.om-spin-wheel-left {
+height: 350px;
+padding: 3rem 1.5rem;
+background: var(--color-dark); /* JAVÍTVA: Fehér háttér */
+border-radius: 0;
+}
+.css-wheel-container {
+position: relative;
+transform: none;
+width: 300px;
+height: 300px;
+}
+.om-spin-wheel-right {
+padding: 2.5rem 1.5rem;
+text-align: center;
+box-shadow: none;
+background: var(--color-dark);
+border-radius: 0;
+}
+.om-spin-wheel-right .om-brand {
+margin: 0 auto 1.5rem auto;
+}
+}
+
+/* A "Nem kérem" gomb stílusa */
+.om-secondary-button {
+display: block;
+width: 100%;
+padding: 0.8rem 1.5rem;
+background: transparent;
+color: rgba(var(--color-secondary-rgb), 0.7);
+border: none;
+font-size: 0.9rem;
+font-weight: 600;
+cursor: pointer;
+transition: color 0.3s;
+text-align: center;
+}
+.om-secondary-button:hover {
+color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+.om-spin-wheel-popup {
+background: var(--color-dark); /* Mobilon a teljes popup fehér */
+box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); /* Visszaadjuk az árnyékot */
+}
+.om-spin-wheel-inner {
+grid-template-columns: 1fr; /* Egy oszlop mobilon */
+min-height: auto;
+}
+.om-spin-wheel-left {
+height: 350px;
+padding: 3rem 1.5rem;
+background: var(--color-secondary); /* Mobilon is sötét a kerék háttere */
+border-radius: 0;
+}
+.css-wheel-container {
+position: relative; /* Visszaállítjuk relatívra */
+transform: translate(0, 0); /* Kikapcsoljuk az eltolást */
+width: 300px;
+height: 300px;
+}
+.om-spin-wheel-right {
+padding: 2.5rem 1.5rem;
+text-align: center;
+box-shadow: none; /* Mobilon nincs árnyék a jobb oldalon */
+background: var(--color-dark);
+border-radius: 0;
+}
+.om-spin-wheel-right .om-brand {
+margin: 0 auto 1.5rem auto;
+}
+}
+
+/* A "Nem kérem" gomb stílusa */
+.om-secondary-button {
+display: block;
+width: 100%;
+padding: 0.8rem 1.5rem;
+background: transparent;
+color: rgba(var(--color-secondary-rgb), 0.7);
+border: none;
+font-size: 0.9rem;
+font-weight: 600;
+cursor: pointer;
+transition: color 0.3s;
+text-align: center;
+}
+.om-secondary-button:hover {
+color: var(--color-primary);
+}
+
+</style>
+</head>
+<body>
+<div class="gradient-bg"></div>
+
+
+
+<section class="hero">
+<div class="hero-content">
+
+<h1 data-placeholder="heroTitle"></h1>
+<p data-placeholder="heroSubtitle"></p>
+<div class="hero-buttons">
+<a href="https://app.optimonk.com/register/en" class="btn btn-primary">
+<span>Ich probiere es kostenlos aus</span>
+<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+</svg>
+</a>
+<a href="#" class="btn btn-ghost" id="demoButton" data-placeholder="heroDemoButton"></a>
+</div>
+</div>
+</section>
+
+<section class="logo-cloud-section">
+<div class="container">
+<h2 class="logo-cloud-header">Über 30.000 Onlineshops vertrauen auf OptiMonk, darunter:</h2>
+<div class="logo-cloud-container">
+<img src="https://optimonk.hu/wp-content/uploads/fooldal_hero_logos_avon_3.svg" alt="Partner Logó">
+<img src="https://optimonk.hu/wp-content/uploads/fooldal_hero_logos_biotech_3.svg" alt="Partner Logó">
+<img src="https://optimonk.hu/wp-content/uploads/image-3-3.png" alt="Partner Logó">
+<img src="https://optimonk.hu/wp-content/uploads/diego_logo_7.svg" alt="Partner Logó">
+<img src="https://optimonk.hu/wp-content/uploads/fooldal_hero_logos_yettel_3.svg" alt="Partner Logó">
+</div>
+</div>
+</section>
+
+<section>
+<div class="container">
+<div class="section-header scroll-reveal">
+<span class="section-label" data-placeholder="problemsLabel"></span>
+<h2 class="section-title" data-placeholder="problemsTitle"></h2>
+</div>
+<div class="problems-grid">
+<div class="glass-card problem-card scroll-reveal" data-modal-target="problem1-modal">
+<div class="icon-wrapper">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+</svg>
+</div>
+<h3 data-placeholder="problem1Title"></h3>
+<p data-placeholder="problem1Text"></p>
+</div>
+<div class="glass-card problem-card scroll-reveal" data-modal-target="problem2-modal">
+<div class="icon-wrapper">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+</svg>
+</div>
+<h3 data-placeholder="problem2Title"></h3>
+<p data-placeholder="problem2Text"></p>
+</div>
+<div class="glass-card problem-card scroll-reveal" data-modal-target="problem3-modal">
+<div class="icon-wrapper">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+</svg>
+</div>
+<h3 data-placeholder="problem3Title"></h3>
+<p data-placeholder="problem3Text"></p>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="container">
+<div class="section-header scroll-reveal">
+<span class="section-label">Lösungen</span>
+<h2 class="section-title" data-placeholder="solutionsTitle"></h2>
+<p class="section-description" data-placeholder="solutionsSubtitle"></p>
+</div>
+<div class="solutions-grid">
+<div class="glass-card solution-card scroll-reveal" data-popup-target="1">
+<div class="icon-wrapper">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+</svg>
+</div>
+<h3 data-placeholder="solution1Title"></h3>
+<p data-placeholder="solution1Text"></p>
+</div>
+<div class="glass-card solution-card scroll-reveal" data-popup-target="2">
+<div class="icon-wrapper">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+</svg>
+</div>
+<h3 data-placeholder="solution2Title"></h3>
+<p data-placeholder="solution2Text"></p>
+</div>
+<div class="glass-card solution-card scroll-reveal" data-popup-target="3">
+<div class="icon-wrapper">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+</svg>
+</div>
+<h3 data-placeholder="solution3Title"></h3>
+<p data-placeholder="solution3Text"></p>
+</div>
+<div class="glass-card solution-card scroll-reveal" data-popup-target="4">
+<div class="icon-wrapper">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+</svg>
+</div>
+<h3 data-placeholder="solution4Title"></h3>
+<p data-placeholder="solution4Text"></p>
+</div>
+<div class="glass-card solution-card scroll-reveal" data-popup-target="5">
+<div class="icon-wrapper">
+<svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+</svg>
+</div>
+<h3 data-placeholder="solution5Title"></h3>
+<p data-placeholder="solution5Text"></p>
+</div>
+<div class="glass-card solution-card scroll-reveal" data-popup-target="6">
+<div class="icon-wrapper">
+<svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+</svg>
+</div>
+<h3 data-placeholder="solution6Title"></h3>
+<p data-placeholder="solution6Text"></p>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="container">
+<div class="section-header scroll-reveal">
+<span class="section-label">Der Ablauf</span>
+<h2 class="section-title">Los geht’s in 3 einfachen Schritten.</h2>
+</div>
+<div class="how-it-works-grid">
+<div class="glass-card step-card scroll-reveal">
+<div class="step-number">1.</div>
+<h3>Wähle eine Vorlage</h3>
+<p>Du kannst aus Hunderten branchenspezifischen und bewährten Vorlagen wählen, damit du nicht bei null anfangen musst.</p>
+</div>
+<div class="glass-card step-card scroll-reveal">
+<div class="step-number">2.</div>
+<h3>Personalisierungs</h3>
+<p>Lege in nur wenigen Minuten mit unserem Drag-and-Drop-Editor deine Zielregeln fest (z. B. Exit-Intent, Warenkorbwert, geografischer Standort).</p>
+</div>
+<div class="glass-card step-card scroll-reveal">
+<div class="step-number">3.</div>
+<h3>Integration und Messung</h3>
+<p data-placeholder="step3Text">OptiMonk lässt sich nahtlos mit deinen bevorzugten Marketing-Tools integrieren und synchronisiert die Daten automatisch, damit du deine Ergebnisse genau messen kannst.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="container">
+<div class="section-header scroll-reveal">
+<span class="section-label">Das sagen sie über uns</span>
+<h2 class="section-title">Echte Ergebnisse von echten Partnern</h2>
+</div>
+<div class="testimonial-grid">
+<div class="glass-card testimonial-card scroll-reveal">
+<p class="testimonial-text">"I’m a massive fan of OptiMonk and I’ve  been a user of them for 5 years now and there is absolutely no one else I would choose to use."</p>
+<div class="testimonial-author-wrapper">
+<cite>Jason K Williamson <span>– E2 Agency</span></cite>
+</div>
+</div>
+<div class="glass-card testimonial-card scroll-reveal">
+<p class="testimonial-text">“We’ve been seeing a lot of good results on our business. First and foremost higher conversion rate combined with increased revenues as well.”</p>
+<div class="testimonial-author-wrapper">
+
+<cite>Laura Arnesen <span>– Christopher Cloos</span></cite>
+</div>
+</div>
+<div class="glass-card testimonial-card scroll-reveal">
+<p class="testimonial-text">“The team has been fantastic in helping  us find all those little areas on our site to get those extra conversions, stuff that we have never thought about would make  a big impact.”</p>
+<div class="testimonial-author-wrapper">
+<cite>Matt Edmundson <span>– Vegetology</span></cite>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="container">
+<div class="section-header scroll-reveal">
+<span class="section-label">Ergebnisse</span>
+<h2 class="section-title">Nachgewiesenes Wachstum</h2>
+</div>
+<div class="stats-grid">
+<div class="glass-card stat-card scroll-reveal">
+<div class="stat-number" data-placeholder="stat1Number"></div>
+<div class="stat-label" data-placeholder="stat1Label"></div>
+</div>
+<div class="glass-card stat-card scroll-reveal">
+<div class="stat-number">12%</div>
+<div class="stat-label">Durchschnittliche Steigerung der Conversionrate</div>
+</div>
+<div class="glass-card stat-card scroll-reveal">
+<div class="stat-number">+40%</div>
+<div class="stat-label">Mehr wiederkehrende Käufer</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="cta-section">
+<div class="cta-content scroll-reveal">
+<h2 data-placeholder="ctaTitle"></h2>
+<p data-placeholder="ctaSubtitle"></p>
+<a href="https://app.optimonk.com/register/en" class="btn btn-primary">Probiere es kostenlos aus</a>
+</div>
+</section>
+
+<div class="om-campaign" id="popup1">
+<div class="om-overlay"></div>
+<div class="om-popup">
+<div class="om-close" onclick="closeAllPopups()">&times;</div>
+<div class="om-popup-inner">
+<div class="om-left">
+<div class="om-brand" data-placeholder="brandLogoHTML"></div>
+<div class="om-title" data-placeholder="popup1Title"></div>
+<div class="om-text" data-placeholder="popup1Text"></div>
+<input type="email" class="om-input" placeholder="Gib deine E-Mail-Adresse ein">
+<button class="om-button" data-placeholder="popup1Button"></button>
+</div>
+<div class="om-right">
+<div class="om-image-panner" id="panner_1">
+<img data-placeholder="popup1Image" id="popupImage_1" src="..." alt="Popup kép" class="om-product-img">
+</div>
+<div class="om-image-controls">
+<button class="om-image-btn om-toggle-fit" data-popup-id="1" title="Váltás 'Kitöltés'/'Teljes kép' között">⛶</button>
+<button class="om-image-btn om-cycle-pos" data-popup-id="1" title="Kép pozíciójának váltása">✥</button>
+<button class="om-image-btn om-image-swap-btn" data-popup-id="1" title="Kép cseréje">⟳</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="om-campaign" id="popup2">
+<div class="om-overlay"></div>
+<div class="om-popup">
+<div class="om-close" onclick="closeAllPopups()">&times;</div>
+<div class="om-popup-inner">
+<div class="om-left">
+<div class="om-brand" data-placeholder="brandLogoHTML"></div>
+<div class="om-title" data-placeholder="popup2Title"></div>
+<div class="om-text" data-placeholder="popup2Text"></div>
+<div class="om-products" data-placeholder="popup2Products"></div>
+<button class="om-button" data-placeholder="popup2Button"></button>
+</div>
+<div class="om-right">
+<div class="om-image-panner" id="panner_2">
+<img data-placeholder="popup2Image" id="popupImage_2" src="..." alt="Popup kép" class="om-product-img">
+</div>
+<div class="om-image-controls">
+<button class="om-image-btn om-toggle-fit" data-popup-id="2" title="Váltás 'Kitöltés'/'Teljes kép' között">⛶</button>
+<button class="om-image-btn om-cycle-pos" data-popup-id="2" title="Kép pozíciójának váltása">✥</button>
+<button class="om-image-btn om-image-swap-btn" data-popup-id="2" title="Kép cseréje">⟳</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="om-campaign" id="popup3">
+<div class="om-overlay"></div>
+<div class="om-popup">
+<div class="om-close" onclick="closeAllPopups()">&times;</div>
+<div class="om-popup-inner">
+<div class="om-left">
+<div class="om-brand" data-placeholder="brandLogoHTML"></div>
+<div class="om-title" data-placeholder="popup3Title"></div>
+<div class="om-subtitle" data-placeholder="popup3Subtitle"></div>
+<div class="om-products" data-placeholder="popup3Products"></div>
+<button class="om-button" data-placeholder="popup3Button"></button>
+</div>
+<div class="om-right">
+<div class="om-image-panner" id="panner_3">
+<img data-placeholder="popup3Image" id="popupImage_3" src="..." alt="Popup kép" class="om-product-img">
+</div>
+<div class="om-image-controls">
+<button class="om-image-btn om-toggle-fit" data-popup-id="3" title="Váltás 'Kitöltés'/'Teljes kép' között">⛶</button>
+<button class="om-image-btn om-cycle-pos" data-popup-id="3" title="Kép pozíciójának váltása">✥</button>
+<button class="om-image-btn om-image-swap-btn" data-popup-id="3" title="Kép cseréje">⟳</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="om-campaign" id="popup4">
+<div class="om-overlay"></div>
+<div class="om-popup" style="max-width: 450px;"> <div class="om-close" onclick="closeAllPopups()">&times;</div>
+<div class="om-popup-inner-single"> <div class="om-left">
+<div class="om-brand" data-placeholder="brandLogoHTML"></div>
+<div class="om-title" data-placeholder="popup4Title"></div>
+<div class="om-text" data-placeholder="popup4Text"></div>
+<button class="om-button" data-placeholder="popup4Button"></button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="om-campaign" id="popup5">
+<div class="om-overlay"></div>
+<div class="om-popup om-spin-wheel-popup">
+<div class="om-close" onclick="closeAllPopups()">&times;</div>
+<div class="om-popup-inner om-spin-wheel-inner">
+
+<div class="om-spin-wheel-left">
+<div class="css-wheel-container">
+<div class="wheel-pointer"></div>
+<div class="css-wheel"></div>
+<div class="wheel-inner-circle"></div>
+</div>
+</div>
+
+<div class="om-spin-wheel-right">
+<div class="om-brand" data-placeholder="brandLogoHTML"></div>
+<div class="om-title" data-placeholder="popup5Title"></div>
+<div class="om-text" data-placeholder="popup5Text"></div>
+<input type="email" class="om-input om-spin-wheel-input" placeholder="Gib deine E-Mail-Adresse ein">
+<button class="om-button om-spin-wheel-button" data-placeholder="popup5Button"></button>
+<button class="om-secondary-button" onclick="closeAllPopups()">Nein, ich zahle lieber den vollen Preis</button>
+</div>
+
+</div>
+</div>
+</div>
+
+<div class="om-campaign" id="popup6">
+<div class="om-overlay"></div>
+<div class="om-popup" style="max-width: 450px;">
+<div class="om-close" onclick="closeAllPopups()">&times;</div>
+<div class="om-popup-inner-single">
+<div class="om-left">
+<div class="om-brand" data-placeholder="brandLogoHTML"></div>
+<div class="om-title" data-placeholder="popup6Title"></div>
+<div class="om-timer" data-placeholder="popup6Urgency">14:59</div>
+<div class="om-text" data-placeholder="popup6Text"></div>
+<button class="om-button" data-placeholder="popup6Button"></button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="om-modal" id="problem1-modal">
+<div class="om-modal-overlay"></div>
+<div class="om-modal-content">
+<div class="om-modal-close">&times;</div>
+<div class="om-modal-icon">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+</svg>
+</div>
+<h2 data-placeholder="problem1Title"></h2>
+<div class="om-modal-body" data-placeholder="problem1ModalDesc"></div>
+</div>
+</div>
+<div class="om-modal" id="problem2-modal">
+<div class="om-modal-overlay"></div>
+<div class="om-modal-content">
+<div class="om-modal-close">&times;</div>
+<div class="om-modal-icon">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+</svg>
+</div>
+<h2 data-placeholder="problem2Title"></h2>
+<div class="om-modal-body" data-placeholder="problem2ModalDesc"></div>
+</div>
+</div>
+<div class="om-modal" id="problem3-modal">
+<div class="om-modal-overlay"></div>
+<div class="om-modal-content">
+<div class="om-modal-close">&times;</div>
+<div class="om-modal-icon">
+<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+</svg>
+</div>
+<h2 data-placeholder="problem3Title"></h2>
+<div class="om-modal-body" data-placeholder="problem3ModalDesc"></div>
+</div>
+</div>
+<div class="om-nav-btn om-nav-prev" id="prevBtn">
+<svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+</svg>
+</div>
+<div class="om-nav-btn om-nav-next" id="nextBtn">
+<svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+</svg>
+</div>
+
+
+<script>
+// =================================================================
+// === 1. GLOBÁLIS VÁLTOZÓK ÉS ADATOK ===
+// =================================================================
+
+// IDE ILLESZD BE AZ N8N KIMENETÉT
+const n8nData = {
+"Company": "ELTEN",
+"Industry": "divat és ruházat (ruha, cipő, kiegészítők)",
+"ConversionRate": "3.4%",
+"Platform": "UNAS",
+"TargetFeature1": "Sicherheitsschuhe",
+"TargetFeature2": "Handwerker und Industriearbeiter",
+"TargetFeature3": "Arbeitsschutz",
+"mainBrandColor": "#dc092f",
+"keyTrend": "Moderne Sicherheitsschuhe mit Komfort",
+"keyProducts": ["MADDOX BOA®","RENZO Mid ESD","SANDER XXT Pro"],
+"socialProof": "Seit 1910 - Made in Uedem",
+"scrapedLogoURL": "https://elten-store.de/media/7e/30/a3/1758796282/elten-logo.svg?ts=1758796282",
+"scrapedProductURL": "",
+"cleanImageUrls": ["","https://elten-store.de/thumbnail/5b/6a/ab/1739542093/Stiefel_High_400x400.png?ts=1739542093","https://elten-store.de/thumbnail/f0/e7/76/1739542092/Stiefel_400x400.png?ts=1739542093","https://elten-store.de/thumbnail/09/02/ca/1739542092/Halbschuh_400x400.png?ts=1739542093","https://elten-store.de/thumbnail/75/79/99/1739542093/Sandalen_400x400.png?ts=1739542093","https://elten-store.de/thumbnail/a2/82/0c/1739542093/CLogs_400x400.png?ts=1739542093","https://elten-store.de/media/63/73/c3/1738915257/products-SW6_elten-store_de-765841_0.jpg?ts=1762392652","https://elten-store.de/media/ba/c6/1a/1738915848/products-SW6_elten-store_de-769491_0.jpg?ts=1762392844","https://elten-store.de/media/4d/35/cd/1738915650/products-SW6_elten-store_de-769151_0.jpg?ts=1762392777","https://elten-store.de/media/65/8d/7e/1738915909/products-SW6_elten-store_de-720721_0.jpg?ts=1762392864"],
+"brandLogoHTML": "<img src=\"https://elten-store.de/media/7e/30/a3/1758796282/elten-logo.svg?ts=1758796282\" alt=\"ELTEN Logo\">",
+"pageTitle": "OptiMonk x ELTEN | Personalisierte Strategie",
+"analysisTitle": "ELTEN Sicherheitsschuhe: Potenzial für höhere Konversionen",
+"analysisText": "<p>Mit einer Konversionsrate von <strong>3,4%</strong> liegt ELTEN im Branchendurchschnitt für Schuhe und Bekleidung. Als etablierter Hersteller von Sicherheitsschuhen seit 1910 verfügt das Unternehmen über starke Grundlagen:</p><ul><li><strong>Vertrauen und Tradition:</strong> \"Made in Uedem\" seit über 100 Jahren schafft Glaubwürdigkeit</li><li><strong>Breites Produktsortiment:</strong> Von S1 bis S3 Sicherheitsklassen für alle Branchen</li><li><strong>Innovative Features:</strong> BOA® Fit System, Gore-Tex, Wellmaxx-Technologie</li></ul><p><strong>Ungenutzte Möglichkeiten:</strong> Die Website zeigt viele Produkte, aber es fehlen personalisierte Empfehlungen basierend auf Branche oder Sicherheitsanforderungen. Viele Besucher verlassen wahrscheinlich die Seite, weil sie von der Produktvielfalt überwältigt sind.</p><p><strong>Optimierungspotenzial:</strong> Durch gezielte Popups für verschiedene Branchen (Baugewerbe, Feuerwehr, Industrie) und Exit-Intent-Strategien könnte ELTEN die Konversionsrate deutlich über den Branchendurchschnitt steigern.</p>",
+"heroBadge": "Sicherheitsschuhe-Spezialist",
+"heroTitle": "ELTEN x OptiMonk",
+"heroSubtitle": "Steigern Sie den Verkauf von Sicherheitsschuhen durch personalisierte Empfehlungen und bauen Sie eine starke Community von Handwerkern und Industriearbeitern auf.",
+"heroDemoButton": "Demo für ELTEN ansehen",
+"problemsLabel": "Herausforderungen im Sicherheitsschuhe-Verkauf",
+"problemsTitle": "Kommen Ihnen diese Herausforderungen bekannt vor?",
+"problem1Title": "Besucher stöbern, kaufen aber nicht",
+"problem1Text": "Viele Handwerker schauen sich Sicherheitsschuhe an, zögern aber beim Kauf aufgrund der Preise oder Unsicherheit über die richtige Sicherheitsklasse.",
+"problem2Title": "Warenkörbe werden verlassen",
+"problem2Text": "Kunden legen Sicherheitsschuhe in den Warenkorb, verlassen aber die Seite ohne Kauf, oft wegen fehlender Größenberatung oder Unsicherheit.",
+"problem3Title": "Keine Kundenbindung aufgebaut",
+"problem3Text": "Es werden keine E-Mail-Adressen gesammelt, um Handwerker über neue Sicherheitsstandards oder Produktneuheiten zu informieren.",
+"problem1ModalDesc": "<h3>Das Kernproblem</h3>Besucher sind interessiert an Sicherheitsschuhen, aber die große Produktvielfalt und verschiedene Sicherheitsklassen überfordern sie. Sie verlassen die Seite ohne Kauf, weil sie unsicher sind, welcher Schuh für ihre Branche geeignet ist.<h3>Die OptiMonk-Lösung</h3>OptiMonk zeigt Exit-Intent-Popups mit branchenspezifischen Empfehlungen und Gutscheinen, um unentschlossene Besucher zu Käufern zu konvertieren.",
+"problem2ModalDesc": "<h3>Das Kernproblem</h3>Kunden legen Sicherheitsschuhe in den Warenkorb, verlassen aber die Seite aufgrund von Zweifeln über Passform, Größe oder Kompatibilität mit ihren Arbeitsanforderungen.<h3>Die OptiMonk-Lösung</h3>OptiMonk erkennt Warenkorbabbrüche und zeigt personalisierte Popups mit Größenberatung, Kundenbewertungen oder zeitlich begrenzten Rabatten, um den Kaufabschluss zu fördern.",
+"problem3ModalDesc": "<h3>Das Kernproblem</h3>Ohne E-Mail-Liste verpasst ELTEN die Chance, langfristige Beziehungen zu Handwerkern aufzubauen und sie über neue Sicherheitsstandards, Produktneuheiten oder Wartungstipps zu informieren.<h3>Die OptiMonk-Lösung</h3>OptiMonk erstellt attraktive Lead-Magneten wie Sicherheitsleitfäden oder VIP-Zugang zu neuen Produkten, um E-Mail-Adressen zu sammeln und eine Community aufzubauen.",
+"solutionsTitle": "Wie OptiMonk ELTEN hilft",
+"solutionsSubtitle": "Nutzen Sie die Tradition und das Vertrauen von ELTEN, um mehr Handwerker zu überzeugen und langfristige Kundenbeziehungen aufzubauen.",
+"solution1Title": "Exit-Intent für Zögernde",
+"solution1Text": "Rettet abwandernde Besucher mit branchenspezifischen Gutscheinen und Sicherheitsleitfäden.",
+"solution2Title": "Sofortige AOV-Steigerung",
+"solution2Text": "Empfiehlt passende Zubehörprodukte wie Einlegesohlen oder Pflegeprodukte zu den Sicherheitsschuhen.",
+"solution3Title": "Community-Aufbau (Lead Gen)",
+"solution3Text": "Sammelt E-Mail-Adressen durch VIP-Zugang zu neuen Sicherheitsstandards und Produktneuheiten.",
+"solution4Title": "Targeting nach Interesse",
+"solution4Text": "Zeigt unterschiedliche Angebote für Bauarbeiter, Feuerwehrleute oder Industriearbeiter basierend auf dem Browsing-Verhalten.",
+"solution5Title": "Gamifiziertes Erlebnis",
+"solution5Text": "Das Glücksrad erhöht die Interaktion und macht den Schuhkauf zu einem unterhaltsamen Erlebnis.",
+"solution6Title": "Dringlichkeit erzeugen",
+"solution6Text": "Countdown-Timer für begrenzte Angebote beschleunigen Kaufentscheidungen bei hochwertigen Sicherheitsschuhen.",
+"stat1Number": "3,4",
+"stat1Label": "Branchendurchschnitt Schuhe & Bekleidung",
+"ctaTitle": "Bereit, den Umsatz von ELTEN zu steigern?",
+"ctaSubtitle": "Starten Sie noch heute Ihre kostenlose Testversion und entdecken Sie, wie OptiMonk Ihre Sicherheitsschuhe-Verkäufe optimiert.",
+"popup1Title": "Warten Sie! Finden Sie den perfekten Sicherheitsschuh",
+"popup1Text": "Lassen Sie sich nicht von der Auswahl überwältigen. Erhalten Sie 10% Rabatt und unseren kostenlosen Branchenleitfäden für die richtige Schuhwahl.",
+"popup1Button": "Leitfaden & Rabatt sichern",
+"popup1Image": "",
+"popup2Title": "Komplettieren Sie Ihre Sicherheitsausrüstung",
+"popup2Text": "Zu Ihren MADDOX Sicherheitsschuhen empfehlen wir passende Einlegesohlen und Pflegeprodukte für maximalen Komfort und Langlebigkeit.",
+"popup2Products": "<div class=\"om-product\">ELTEN Einlegesohlen Wellmaxx</div><div class=\"om-product\">ELTEN Pflegeset für Arbeitsschuhe</div>",
+"popup2Button": "Komplett-Set in den Warenkorb",
+"popup2Image": "",
+"popup3Title": "Werden Sie ELTEN VIP-Mitglied",
+"popup3Subtitle": "Erhalten Sie exklusiven Zugang zu neuen Sicherheitsstandards, Produktneuheiten und Expertentipps für Ihren Arbeitsalltag.",
+"popup3Products": "<div class=\"om-product\">Frühzeitiger Zugang zu neuen Modellen</div><div class=\"om-product\">Kostenlose Sicherheitsleitfäden</div><div class=\"om-product\">Exklusive Mitgliederrabatte</div>",
+"popup3Button": "VIP-Mitglied werden",
+"popup3Image": "",
+"popup4Title": "Speziell für Bauarbeiter",
+"popup4Text": "Entdecken Sie unsere S3-Sicherheitsschuhe mit verstärkter Sohle und Zehenschutz - perfekt für die harten Anforderungen auf der Baustelle.",
+"popup4Button": "Bauarbeiter-Schuhe ansehen",
+"popup4Image": "",
+"popup5Title": "Drehen Sie das Glücksrad!",
+"popup5Text": "Gewinnen Sie bis zu 25% Rabatt auf Ihre ELTEN Sicherheitsschuhe. Jeder gewinnt - drehen Sie jetzt und sparen Sie!",
+"popup5Button": "Jetzt drehen!",
+"popup5NoThanks": "Nein, ich zahle lieber den vollen Preis",
+"popup5Image": "Please generate a realistic image of a \"Spin the Wheel\" popup, with a dark blue background on the left side where the wheel is located, and a white background on the right side for text and input fields. The wheel itself should use colors derived from #2C3E50 and a darker shade for alternating segments, similar to the provided image example. The text on the right side should be clear and professional.",
+"popup6Title": "Ihr Rabatt läuft bald ab!",
+"popup6Urgency": "<div class=\"om-timer\">14:59</div>",
+"popup6Text": "Ihr 10% Rabatt auf ELTEN Sicherheitsschuhe ist nur noch wenige Minuten gültig. Sichern Sie sich jetzt Ihre Arbeitsschuhe zum Sonderpreis!",
+"popup6Button": "Rabatt jetzt einlösen!",
+"popup6Image": ""
+};
+
+let currentPopupIndex = 1;
+const totalPopups = 6;
+let countdownInterval = null;
+
+let navButtons = null;
+let reveals = null;
+
+// Képkezelő állapotok
+let imageIndexes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+let imageFitStates = { 1: 'cover', 2: 'cover', 3: 'cover', 4: 'cover', 5: 'cover', 6: 'cover' };
+let imagePosStates = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+const imagePositions = ['center', 'left', 'right']; // Csak ez a 3 pozíció
+
+// TÖRÖLVE: Drag-and-drop változók
+
+// =================================================================
+// === 2. FŐ INDÍTÓ FÜGGVÉNY (DOMContentLoaded) ===
+// =================================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+navButtons = document.querySelectorAll('.om-nav-btn');
+reveals = document.querySelectorAll(".scroll-reveal");
+
+if (typeof n8nData === 'undefined' || !n8nData.Company) {
+console.error("n8nData nem található vagy üres!");
+document.body.innerHTML = "<h1 style='font-family: sans-serif; text-align: center; margin-top: 50px; color: red;'>Hiba: A személyre szabott adatok betöltése sikertelen.</h1><p style='font-family: sans-serif; text-align: center;'>Töltsd ki az n8nData objektumot a script tag-ben.</p>";
+return;
+}
+
+injectorFunction(n8nData);
+setupEventListeners();
+revealOnScroll();
+});
+
+// =================================================================
+// === 3. SEGÉDFÜGGVÉNYEK ===
+// =================================================================
+
+// --- TARTALOM BEILLESZTŐ ---
+function injectorFunction(data) {
+document.querySelectorAll('[data-placeholder]').forEach(el => {
+const key = el.getAttribute('data-placeholder');
+if (data[key] !== undefined && data[key] !== null) {
+if (el.tagName === 'IMG') {
+el.src = data[key];
+} else {
+if (key.endsWith('Desc') || key.endsWith('analysisText') || key.endsWith('Products') || key.endsWith('Urgency')) {
+el.innerHTML = formatGeneratedHtml(data[key]);
+} else {
+el.innerHTML = data[key];
+}
+}
+}
+});
+
+const titleEl = document.querySelector('title[data-placeholder="pageTitle"]');
+if (titleEl && data["pageTitle"]) {
+document.title = data["pageTitle"];
+}
+
+if (data.mainBrandColor && /^#([0-9A-F]{3}){1,2}$/i.test(data.mainBrandColor)) {
+let hex = data.mainBrandColor.substring(1);
+if (hex.length === 3) {
+hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+}
+const finalHex = '#' + hex;
+document.documentElement.style.setProperty('--color-primary', finalHex);
+
+const r = parseInt(hex.substring(0, 2), 16);
+const g = parseInt(hex.substring(2, 4), 16);
+const b = parseInt(hex.substring(4, 6), 16);
+document.documentElement.style.setProperty('--color-primary-rgb', `${r}, ${g}, ${b}`);
+} else {
+if (data.mainBrandColor && data.mainBrandColor !== "") {
+console.warn(`A 'mainBrandColor' (${data.mainBrandColor}) formátuma érvénytelen. Az alapértelmezett szín lesz használva.`);
+} else {
+console.warn("A 'mainBrandColor' hiányzik vagy üres. Az alapértelmezett szín lesz használva.");
+}
+}
+}
+
+// --- FORMÁZÓ ---
+function formatGeneratedHtml(text) {
+if (!text) return '';
+let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+html = html.replace(/\n/g, '<br>');
+return html;
+}
+
+// --- ESEMÉNYKEZELŐK BEÁLLÍTÁSA ---
+function setupEventListeners() {
+
+// Képcsere (⟳) gomb
+document.querySelectorAll('.om-image-swap-btn').forEach(button => {
+button.addEventListener('click', (e) => {
+e.preventDefault();
+const popupId = e.target.closest('.om-image-btn').getAttribute('data-popup-id');
+swapPopupImage(popupId);
+});
+});
+
+// Méretváltó (⛶) gomb
+document.querySelectorAll('.om-toggle-fit').forEach(button => {
+button.addEventListener('click', (e) => {
+e.preventDefault();
+const popupId = e.target.closest('.om-image-btn').getAttribute('data-popup-id');
+toggleImageFit(popupId);
+});
+});
+
+// 🚩 JAVÍTVA: Pozícióváltó (✥) gomb
+document.querySelectorAll('.om-cycle-pos').forEach(button => {
+button.addEventListener('click', (e) => {
+e.preventDefault();
+const popupId = e.target.closest('.om-image-btn').getAttribute('data-popup-id');
+cycleImagePosition(popupId);
+});
+});
+
+// 🚩 TÖRÖLVE: A "drag" (húzás) eseménykezelői el lettek távolítva
+
+// Probléma Modálok (kártyákra kattintás)
+document.querySelectorAll('.problem-card').forEach(card => {
+card.addEventListener('click', () => {
+const modalId = card.getAttribute('data-modal-target');
+showOmModal(modalId);
+});
+});
+
+// Megoldás Kártyák (kártyákra kattintás -> popup demó)
+document.querySelectorAll('.solution-card').forEach(card => {
+card.addEventListener('click', () => {
+const popupId = card.getAttribute('data-popup-target');
+if(popupId) {
+currentPopupIndex = parseInt(popupId, 10);
+hideNavButtons();
+showPopup(currentPopupIndex);
+}
+});
+});
+
+// Modál bezáró gombok (X és overlay)
+document.querySelectorAll('.om-modal-overlay, .om-modal-close').forEach(el => {
+el.addEventListener('click', () => {
+closeOmModals();
+});
+});
+
+// "Nézd meg a demót" gomb
+const demoButton = document.getElementById("demoButton");
+if (demoButton) {
+demoButton.addEventListener("click", (e) => {
+e.preventDefault();
+currentPopupIndex = 1;
+showNavButtons();
+showPopup(1);
+});
+}
+
+// Popup navigációs gombok (narancssárga nyilak)
+document.getElementById('prevBtn').addEventListener('click', () => navigatePopup(-1));
+document.getElementById('nextBtn').addEventListener('click', () => navigatePopup(1));
+
+// Popup overlay bezárás
+document.addEventListener('click', (e) => {
+if (e.target.classList.contains('om-overlay')) {
+closeAllPopups();
+}
+});
+
+// Billentyűzet (Escape és Nyilak)
+document.addEventListener('keydown', (e) => {
+const anyPopupOpen = document.querySelector('.om-campaign.active');
+const anyModalOpen = document.querySelector('.om-modal.active');
+
+if (anyPopupOpen) {
+if (e.key === 'ArrowLeft') navigatePopup(-1);
+if (e.key === 'ArrowRight') navigatePopup(1);
+if (e.key === 'Escape') closeAllPopups();
+}
+if (anyModalOpen) {
+if (e.key === 'Escape') closeOmModals();
+}
+});
+
+window.addEventListener("scroll", revealOnScroll);
+}
+
+// =================================================================
+// === MODÁL FUNKCIÓK (Probléma & Megoldás) ===
+// =================================================================
+function showOmModal(modalId) {
+const modal = document.getElementById(modalId);
+if (modal) {
+modal.style.display = 'flex';
+setTimeout(() => modal.classList.add('active'), 10);
+document.body.style.overflow = 'hidden';
+}
+}
+
+function closeOmModals() {
+document.querySelectorAll('.om-modal.active').forEach(modal => {
+modal.classList.remove('active');
+setTimeout(() => modal.style.display = 'none', 300);
+});
+if (!document.querySelector('.om-campaign.active')) {
+document.body.style.overflow = 'auto';
+}
+}
+
+// =================================================================
+// === KÉP MANIPULÁLÓ LOGIKA (JAVÍTVA) ===
+// =================================================================
+
+function swapPopupImage(popupId) {
+if (!n8nData || !n8nData.cleanImageUrls || !Array.isArray(n8nData.cleanImageUrls) || n8nData.cleanImageUrls.length === 0) {
+console.warn("Nincsenek elérhető képek a cseréhez.");
+return;
+}
+const imageList = n8nData.cleanImageUrls;
+
+imageIndexes[popupId]++;
+if (imageIndexes[popupId] >= imageList.length) {
+imageIndexes[popupId] = 0;
+}
+
+const newImageUrl = imageList[imageIndexes[popupId]];
+const imageElement = document.getElementById(`popupImage_${popupId}`);
+
+if (imageElement) {
+imageElement.src = newImageUrl;
+}
+}
+
+function toggleImageFit(popupId) {
+const imageElement = document.getElementById(`popupImage_${popupId}`);
+if (!imageElement) return;
+
+const currentState = imageFitStates[popupId];
+const newState = (currentState === 'cover') ? 'contain' : 'cover';
+
+imageElement.style.objectFit = newState;
+imageFitStates[popupId] = newState;
+
+const posButton = document.querySelector(`.om-cycle-pos[data-popup-id="${popupId}"]`);
+
+if (newState === 'contain') {
+imageElement.style.objectPosition = 'center';
+imagePosStates[popupId] = 0;
+if (posButton) posButton.style.opacity = '0.3';
+} else {
+if (posButton) posButton.style.opacity = '1';
+}
+}
+
+// A (✥) gomb funkciója: kattintásra váltogatja a kép pozícióját
+function cycleImagePosition(popupId) {
+const imageElement = document.getElementById(`popupImage_${popupId}`);
+if (!imageElement) return;
+
+if (imageFitStates[popupId] !== 'cover') {
+alert("A kép pozíciójának változtatása csak 'Kitöltés' (⛶) nézetben látható. Válts nézetet, majd próbáld újra.");
+return;
+}
+
+imagePosStates[popupId]++;
+if (imagePosStates[popupId] >= imagePositions.length) {
+imagePosStates[popupId] = 0;
+}
+
+const newPosition = imagePositions[imagePosStates[popupId]];
+imageElement.style.objectPosition = newPosition; // Beállítja a CSS 'object-position'-t
+}
+
+// 🚩 TÖRÖLVE: A "drag" (húzás) funkciók (startDrag, whileDrag, stopDrag) el lettek távolítva
+
+
+// =================================================================
+// === SZÁMLÁLÓ ÉS SCROLL ANIMÁCIÓK ===
+// =================================================================
+function animateCountUp(el) {
+const targetText = el.getAttribute('data-placeholder') === 'stat1Number' ? n8nData.stat1Number : el.textContent;
+if (!targetText) return;
+const target = parseFloat(targetText.replace(/[^0-9.,]/g, '').replace(',', '.'));
+if (isNaN(target)) return;
+
+const prefix = targetText.match(/^[^+0-9]*/)?.[0] || '';
+const suffix = targetText.match(/[^0-9.,]*$/)?.[0] || '';
+const decimals = (target.toString().split('.')[1] || '').length;
+const duration = 1500;
+let startTimestamp = null;
+
+function step(timestamp) {
+if (!startTimestamp) startTimestamp = timestamp;
+const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+const currentValue = progress * (2 - progress) * target;
+el.textContent = prefix + currentValue.toFixed(decimals) + suffix;
+if (progress < 1) {
+window.requestAnimationFrame(step);
+} else {
+el.textContent = targetText;
+}
+}
+el.textContent = prefix + (0).toFixed(decimals) + suffix;
+window.requestAnimationFrame(step);
+}
+
+const revealOnScroll = () => {
+if (!reveals) return;
+for (let el of reveals) {
+const rect = el.getBoundingClientRect();
+if (rect.top < window.innerHeight - 100 && !el.classList.contains('revealed')) {
+el.classList.add("revealed");
+if (el.classList.contains('stat-card') && !el.dataset.animated) {
+const numberEl = el.querySelector('.stat-number');
+if (numberEl) {
+animateCountUp(numberEl);
+el.dataset.animated = 'true';
+}
+}
+}
+}
+};
+
+// =================================================================
+// === OPTIMONK POPUP KEZELÉS (TISZTÍTVA) ===
+// =================================================================
+
+function showNavButtons() {
+if (!navButtons) return;
+navButtons.forEach(btn => {
+btn.style.display = 'flex';
+});
+}
+function hideNavButtons() {
+if (!navButtons) return;
+navButtons.forEach(btn => {
+btn.style.display = 'none';
+});
+}
+
+function showPopup(index) {
+stopCountdown();
+
+for (let i = 1; i <= totalPopups; i++) {
+const popup = document.getElementById(`popup${i}`);
+if (popup) {
+popup.classList.remove('active');
+popup.style.display = 'none';
+}
+}
+const activePopup = document.getElementById(`popup${index}`);
+if (activePopup) {
+activePopup.style.display = 'flex';
+setTimeout(() => {
+activePopup.classList.add('active');
+}, 10);
+}
+
+if (index === 6) {
+const timerDisplay = document.getElementById('popup6Timer');
+if (timerDisplay) {
+startCountdown(14 * 60 + 59, timerDisplay);
+}
+}
+
+if (!document.querySelector('.om-modal.active')) {
+document.body.style.overflow = 'hidden';
+}
+}
+
+function navigatePopup(direction) {
+stopCountdown();
+
+currentPopupIndex += direction;
+if (currentPopupIndex > totalPopups) {
+currentPopupIndex = 1;
+} else if (currentPopupIndex < 1) {
+currentPopupIndex = totalPopups;
+}
+showPopup(currentPopupIndex);
+}
+
+function closeAllPopups() {
+stopCountdown();
+for (let i = 1; i <= totalPopups; i++) {
+const popup = document.getElementById(`popup${i}`);
+if (popup) {
+popup.classList.remove('active');
+popup.style.display = 'none';
+}
+}
+hideNavButtons();
+if (!document.querySelector('.om-modal.active')) {
+document.body.style.overflow = 'auto';
+}
+}
+
+function startCountdown(durationInSeconds, displayElement) {
+clearInterval(countdownInterval);
+let timer = durationInSeconds;
+
+function updateDisplay() {
+const minutes = Math.floor(timer / 60);
+let seconds = timer % 60;
+seconds = seconds < 10 ? "0" + seconds : seconds;
+displayElement.textContent = `${minutes}:${seconds}`;
+}
+
+updateDisplay();
+timer--;
+
+countdownInterval = setInterval(() => {
+updateDisplay();
+if (--timer < 0) {
+timer = 0;
+clearInterval(countdownInterval);
+displayElement.textContent = "0:00";
+}
+}, 1000);
+}
+
+function stopCountdown() {
+clearInterval(countdownInterval);
+}
+
+</script>
+</body>
+</html>
