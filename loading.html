@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* === Variables === */
+        /* === Változók === */
         :root {
             --color-background-dark: #121215;
             --color-text-primary: #e0e0e0;
@@ -19,9 +19,10 @@
             --color-button-bg: rgba(255, 255, 255, 0.08);
             --color-button-border: rgba(255, 255, 255, 0.2);
             --color-button-hover-bg: rgba(255, 255, 255, 0.15);
+            --color-card-bg: rgba(22, 22, 26, 0.6); 
         }
 
-        /* === Base Styles === */
+        /* === Alapstílusok === */
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +33,7 @@
             height: 100%;
         }
 
-        /* === Animated Background === */
+        /* === Animált Háttér === */
         @keyframes backgroundPan {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -44,19 +45,17 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
+        /* === BODY === */
         body {
             font-family: 'Inter', sans-serif;
             color: var(--color-text-primary);
-            display: grid;
-            grid-template-rows: auto 1fr;
-            grid-template-columns: 1fr;
+            display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 1.5rem;
             overflow: hidden;
             position: relative;
-            text-align: center;
             
             background-color: var(--color-background-dark);
             background-image: 
@@ -67,30 +66,125 @@
             animation: backgroundPan 40s ease infinite;
         }
 
-        /* === Titles === */
+        /* === FŐ "GLASS" KÁRTYA === */
+        .generator-container {
+            width: 100%;
+            max-width: 750px; 
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-button-border);
+            border-radius: 24px;
+            padding: 2rem 2.5rem;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            
+            display: grid;
+            grid-template-rows: auto auto 1fr; 
+            gap: 1.5rem; 
+
+            animation: fadeInScale 0.7s ease-out;
+            margin-bottom: 3rem; /* Hely a "Previous" gombnak */
+        }
+        
+        /* === LÉPÉSJELZŐ SÁV (4 LÉPÉS) === */
+        .step-indicator {
+            grid-row: 1 / 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 550px; 
+            margin: 0 auto;
+            padding: 0 0.5rem;
+        }
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            width: 70px; 
+        }
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--color-button-border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background-color: var(--color-button-bg);
+            transition: all 0.3s ease;
+        }
+        .step-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        .step-line {
+            flex-grow: 1;
+            height: 2px;
+            background-color: var(--color-button-border);
+            margin: 0 1rem;
+            margin-top: 16px; 
+        }
+        
+        .step.active .step-number {
+            background-color: var(--color-primary-orange);
+            border-color: var(--color-primary-orange);
+            color: var(--color-background-dark);
+            transform: scale(1.1);
+        }
+        .step.active .step-label {
+            color: var(--color-primary-orange);
+        }
+        
+        .step-selection {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-primary-orange);
+            height: 1.2em; 
+            line-height: 1.2em;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            width: 100%;
+        }
+        .step-selection:not(:empty) {
+             opacity: 1;
+        }
+
+        /* === Címek === */
         .step-title,
         #loading-step h1 {
             font-weight: 700;
-            font-size: 2.2rem;
+            font-size: 2.4rem; 
             color: var(--color-text-primary);
-            margin-bottom: 2rem;
+            margin-bottom: 1rem; 
             line-height: 1.3;
             text-shadow: 0 2px 15px rgba(0,0,0,0.7);
         }
 
-        /* === Helper Text === */
+        /* === Alcímek === */
         .step-subtitle {
             font-size: 1.1rem;
             font-weight: 400;
             color: var(--color-text-secondary);
             line-height: 1.6;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem; 
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
-            margin-top: -1rem; /* Pull up towards title */
+            margin-top: -0.5rem; 
         }
-        
         #loading-step p {
             font-size: 1.1rem;
             font-weight: 400;
@@ -105,21 +199,21 @@
              margin-bottom: 2.5rem;
         }
 
-        /* === Button Grids === */
+        /* === Gomb Rácsok === */
         .user-grid, .language-grid {
             display: grid;
             gap: 1rem;
-            max-width: 750px;
+            max-width: 100%;
             margin: 0 auto;
         }
         .user-grid {
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        }
-        .language-grid {
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         }
+        .language-grid {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
 
-        /* === Choice Buttons (Glass) === */
+        /* === Választó Gombok === */
         .user-btn, .language-link {
             background-color: var(--color-button-bg);
             border: 1px solid var(--color-button-border);
@@ -154,10 +248,10 @@
             -webkit-backdrop-filter: none;
         }
 
-        /* === NEW: Text Input (Domain) === */
+        /* === Text Input === */
         .text-input {
             width: 100%;
-            max-width: 450px; /* Don't let it get too wide */
+            max-width: 450px; 
             height: 50px;
             padding: 0.9rem 1.5rem;
             font-size: 1.05rem;
@@ -170,7 +264,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: all 0.2s ease-out;
-            margin-bottom: 1.5rem; /* Space before the button */
+            margin-bottom: 1.5rem; 
         }
         .text-input:focus {
             outline: none;
@@ -182,7 +276,7 @@
             opacity: 0.7;
         }
         
-        /* === NEW: Action Button (Generate) === */
+        /* === Action Gomb === */
         .action-btn {
             background-color: var(--color-primary-orange);
             border: 1px solid var(--color-primary-orange);
@@ -212,13 +306,23 @@
              opacity: 0.5;
              cursor: not-allowed;
         }
+        
+        /* === TARTALOM KONTÉNER === */
+        .step-content-area {
+            grid-row: 3 / 4;
+            position: relative; 
+            min-height: 300px; 
+            width: 100%;
+        }
 
-        /* === Step Animation Logic (Flash-Bug Fixed) === */
+        /* === Lépés Animáció === */
         .step-content {
-            grid-row: 2 / 3;
-            grid-column: 1 / 2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             
-            /* Hidden by default */
             opacity: 0; 
             pointer-events: none;
             transform: translateY(10px);
@@ -226,26 +330,30 @@
             transition: opacity 0.3s ease-out, transform 0.3s ease-out;
             will-change: opacity, transform;
         }
+        #loading-step {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
         .step-content.is-visible {
             opacity: 1;
             pointer-events: auto;
             transform: translateY(0);
-            /* Animate only when becoming visible */
             animation: fadeInScale 0.6s ease-out; 
         }
 
-        /* === Back Button === */
+        /* === Vissza Gomb === */
         .back-button-wrapper {
-            grid-row: 1 / 2;
-            grid-column: 1 / 2;
+            grid-row: 2 / 3;
             text-align: left;
-            padding-bottom: 0.5rem;
+            padding-bottom: 0;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease-out;
             width: 100%;
-            max-width: 750px; /* Aligns with content */
-            margin: 0 auto;
+            margin: 0;
         }
         .back-button-wrapper.is-visible {
             opacity: 1;
@@ -280,7 +388,7 @@
             transform: translateX(-3px);
         }
 
-        /* === Loader Animation === */
+        /* === Loader Animáció === */
         @keyframes rotatingLoader {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -306,12 +414,209 @@
             animation: rotatingLoader 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite,
                          pulseOrange 2s ease-out infinite 0.5s;
         }
+        
+        /* === Previous Generations Modal (VISSZAKERÜLT) === */
+        
+        .previous-btn {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            padding: 0.5rem 1rem;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.7);
+        }
+        .previous-btn:hover {
+            color: var(--color-primary-orange);
+            text-decoration: underline;
+        }
 
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 12, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+            z-index: 100;
+        }
+        .modal-overlay.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-button-border);
+            border-radius: 24px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            position: relative;
+            
+            transform: translateY(20px) scale(0.98);
+            transition: transform 0.3s ease-out;
+        }
+        .modal-overlay.is-visible .modal-card {
+             transform: translateY(0) scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+        }
+        .modal-close-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--color-text-secondary);
+            stroke-width: 2.5;
+            transition: all 0.2s ease-out;
+        }
+        .modal-close-btn:hover svg {
+            stroke: var(--color-primary-orange);
+            transform: rotate(90deg);
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        #modal-list-step .modal-title {
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        #modal-list-step {
+            display: none;
+        }
+        
+        .modal-back-btn {
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.2s ease-out;
+            padding: 0.5rem;
+            margin-left: -0.5rem;
+            margin-bottom: 0.5rem;
+        }
+         .modal-back-btn:hover {
+            color: var(--color-primary-orange);
+         }
+         .modal-back-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.5;
+         }
+
+        .presentation-list {
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid var(--color-button-border);
+            border-radius: 12px;
+            background: var(--color-button-bg);
+        }
+
+        .presentation-item {
+            display: block;
+            padding: 1rem 1.25rem;
+            color: var(--color-text-primary);
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid var(--color-button-border);
+            transition: all 0.2s ease-out;
+        }
+        .presentation-item:last-child {
+            border-bottom: none;
+        }
+        .presentation-item:hover {
+            background-color: var(--color-button-hover-bg);
+            color: var(--color-primary-orange);
+            padding-left: 1.75rem;
+        }
+        
+        .no-presentations {
+            padding: 2rem 1.25rem;
+            color: var(--color-text-secondary);
+            text-align: center;
+        }
+
+        .presentation-list::-webkit-scrollbar {
+          width: 8px;
+        }
+        .presentation-list::-webkit-scrollbar-track {
+          background: rgba(0,0,0,0.1);
+          border-radius: 10px;
+        }
+        .presentation-list::-webkit-scrollbar-thumb {
+          background: var(--color-primary-orange);
+          border-radius: 10px;
+        }
+        .presentation-list::-webkit-scrollbar-thumb:hover {
+          background: #ffA000;
+        }
+        
+        #modal-list-step .text-input {
+            width: 100%;
+            max-width: none; 
+            margin-bottom: 1rem; 
+            padding-left: 2.75rem; 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%23aaaaaa'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z' /%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 0.85rem center;
+            background-size: 1.25rem;
+        }
+        #modal-list-step .text-input:focus {
+             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%23FF8C00'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z' /%3E%3C/svg%3E");
+        }
+        
         /* === Responsive === */
         @media (max-width: 650px) {
+             .generator-container {
+                padding: 1.5rem 1.5rem;
+                gap: 1rem;
+            }
+            .step-content-area {
+                min-height: 350px;
+            }
+            
             .step-title, #loading-step h1 {
                 font-size: 1.8rem;
-                margin-bottom: 1.5rem;
+                margin-bottom: 1rem;
             }
             .user-grid, .language-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -324,15 +629,51 @@
             }
             #loading-step p, .step-subtitle {
                 font-size: 1rem;
+                margin-bottom: 2rem;
             }
             .loader {
                 width: 50px;
                 height: 50px;
             }
+            
+            .step-indicator {
+                max-width: 100%;
+            }
+            .step-label {
+                font-size: 0.7rem;
+            }
+            .step-number {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+            .step-line {
+                margin: 0 0.5rem;
+                margin-top: 14px; 
+            }
+            .step {
+                width: 60px; 
+            }
+            .step-selection {
+                font-size: 0.7rem;
+            }
+            
+            .modal-card {
+                padding: 1.5rem;
+            }
+            .modal-title {
+                font-size: 1.5rem;
+            }
         }
         @media (max-width: 400px) {
              .user-grid, .language-grid {
-                 grid-template-columns: 1fr; /* Single column on mobile */
+                 grid-template-columns: 1fr;
+            }
+            .step-line {
+                margin: 0 0.25rem;
+            }
+            .step {
+                width: 55px;
             }
         }
 
@@ -340,55 +681,132 @@
 </head>
 <body>
     
-    <div class="back-button-wrapper" id="back-button-wrapper">
-        <button id="back-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-            </svg>
-            Back
-        </button>
-    </div>
+    <div class="generator-container" id="generator-container">
 
-    <div id="person-step" class="step-content is-visible">
-        <h1 class="step-title">Who will present?</h1>
-        <div class="user-grid">
-            <button class="user-btn" data-person-value="csilla">Csilla</button>
-            <button class="user-btn" data-person-value="kata">Kata</button>
-            <button class="user-btn" data-person-value="zita">Zita</button>
-            <button class="user-btn" data-person-value="robi">Robi</button>
-            <button class="user-btn" data-person-value="krisztian">Krisztián</button>
-            <button class="user-btn" data-person-value="imi">Imi</button>
-            <button class="user-btn" data-person-value="emil">Emil</button>
+        <div class="step-indicator" id="step-indicator">
+            <div class="step active" id="indicator-1">
+                <div class="step-number">1</div>
+                <div class="step-label">Presenter</div>
+                <span class="step-selection" id="presenter-selection"></span> 
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="indicator-2">
+                <div class="step-number">2</div>
+                <div class="step-label">Language</div>
+                <span class="step-selection" id="language-selection"></span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="indicator-3">
+                <div class="step-number">3</div>
+                <div class="step-label">Domain</div>
+                <span class="step-selection" id="domain-selection"></span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="indicator-4">
+                <div class="step-number">4</div>
+                <div class="step-label">Generate</div>
+                <span class="step-selection"></span>
+            </div>
         </div>
-    </div>
 
-    <div id="language-step" class="step-content">
-        <h1 class="step-title">Which language will you present in?</h1>
-        <div class="language-grid">
-            <button class="language-link" data-lang-value="hu">Hungarian</button>
-            <button class="language-link" data-lang-value="en">English</button>
-            <button class="language-link" data-lang-value="de">German</button>
-            <button class="language-link" data-lang-value="ro">Romanian</button>
+        <div class="back-button-wrapper" id="back-button-wrapper">
+            <button id="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+                Back
+            </button>
         </div>
-    </div>
 
-    <div id="domain-step" class="step-content">
-        <h1 class="step-title">Which webshop do you want to analyze?</h1>
-        <p class="step-subtitle">Please enter the full URL of the webshop.</p>
-        <input type="url" id="domain-input" class="text-input" placeholder="https://www.yourshop.com">
-        <br>
-        <button id="generate-btn" class="action-btn">Generate</button>
-    </div>
+        <div class="step-content-area">
+            
+            <div id="person-step" class="step-content is-visible">
+                <h1 class="step-title">Who will present?</h1>
+                <p class="step-subtitle">Select your name from the list below.</p>
+                <div class="user-grid">
+                    <button class="user-btn" data-person-value="csilla">Csilla</button>
+                    <button class="user-btn" data-person-value="kata">Kata</button>
+                    <button class="user-btn" data-person-value="zita">Zita</button>
+                    <button class="user-btn" data-person-value="robi">Robi</button>
+                    <button class="user-btn" data-person-value="krisztian">Krisztián</button>
+                    <button class="user-btn" data-person-value="imi">Imi</button>
+                    <button class="user-btn" data-person-value="emil">Emil</button>
+                </div>
+            </div>
 
-    <div id="loading-step" class="step-content">
-        <h1 id="status-title">Generating...</h1>
-        <p id="status-text">
-            Your personalized analysis is being prepared. Don't worry, the page will refresh automatically once it's ready.
-        </p>
-        <p>Go grab a coffee! 😊☕</p>
-        
-        <div class="loader-wrapper">
-            <div class="loader"></div>
+            <div id="language-step" class="step-content">
+                <h1 class="step-title">Which language will you present in?</h1>
+                <p class="step-subtitle">Choose the presentation language.</p>
+                <div class="language-grid">
+                    <button class="language-link" data-lang-value="hu">Hungarian</button>
+                    <button class="language-link" data-lang-value="en">English</button>
+                    <button class="language-link" data-lang-value="de">German</button>
+                    <button class="language-link" data-lang-value="ro">Romanian</button>
+                </div>
+            </div>
+
+            <div id="domain-step" class="step-content">
+                <h1 class="step-title">Which webshop do you want to analyze?</h1>
+                <p class="step-subtitle">Please enter the full URL of the webshop.</p>
+                <input type="url" id="domain-input" class="text-input" placeholder="https://www.yourshop.com">
+                <br>
+                <button id="generate-btn" class="action-btn">Generate</button>
+            </div>
+
+            <div id="loading-step" class="step-content">
+                <h1 id="status-title">Generating...</h1>
+                <p id="status-text">
+                    Your personalized analysis is being prepared. Don't worry, the page will refresh automatically once it's ready.
+                </p>
+                <p>Go grab a coffee! 😊☕</p>
+                
+                <div class="loader-wrapper">
+                    <div class="loader"></div>
+                </div>
+            </div>
+
+        </div> </div> <button id="show-previous-btn" class="previous-btn">
+        View Previous Generations
+    </button>
+
+    <div class="modal-overlay" id="previous-modal-overlay">
+        <div class="modal-card">
+            
+            <button class="modal-close-btn" id="modal-close-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div id="modal-person-step">
+                <h1 class="modal-title">View Previous Generations</h1>
+                <p class="step-subtitle">Whose presentations do you want to see?</p>
+                <div class="user-grid">
+                    <button class="user-btn modal-user-btn" data-person-value="csilla">Csilla</button>
+                    <button class="user-btn modal-user-btn" data-person-value="kata">Kata</button>
+                    <button class="user-btn modal-user-btn" data-person-value="zita">Zita</button>
+                    <button class="user-btn modal-user-btn" data-person-value="robi">Robi</button>
+                    <button class="user-btn modal-user-btn" data-person-value="krisztian">Krisztián</button>
+                    <button class="user-btn modal-user-btn" data-person-value="imi">Imi</button>
+                    <button class="user-btn modal-user-btn" data-person-value="emil">Emil</button>
+                </div>
+            </div>
+
+            <div id="modal-list-step">
+                <button class="modal-back-btn" id="modal-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                    Back to names
+                </button>
+                <h1 class="modal-title" id="modal-list-title">Presentations</h1>
+                
+                <input type="text" id="modal-search-input" class="text-input" placeholder="Search presentations...">
+                
+                <div class="presentation-list" id="modal-list-container">
+                    </div>
+            </div>
+
         </div>
     </div>
 
@@ -397,12 +815,41 @@
         document.addEventListener('DOMContentLoaded', () => {
             
             // --- Settings ---
-            const WEBHOOK_BASE_URL = "https://n8n.onsiteretargeting.com/webhook/demo-generation";
-            // const REDIRECT_URL = 'index.html'; // Erre már nincs szükség, törölheted vagy kikommentelheted
-            const REPO_BASE_URL = 'https://thisisoptimonk.github.io/'; // <-- ÍGY ADD HOZZÁ EZT AZ ÚJ SORT
-            const FINAL_PAGE_KEY = 'data-placeholder="pageTitle"';
-            const POLLING_INTERVAL = 15000;
-            const INITIAL_DELAY = 90000;
+            const WEBHOOK_BASE_URL = "https://n8n.onsiteretargeting.com/webhook/demo-generation";
+            const REPO_BASE_URL = 'thisisoptimonk.github.io/'; // (HTTPS protokoll eltávolítva a kérésedre)
+            const FINAL_PAGE_KEY = 'data-placeholder="pageTitle"';
+            const POLLING_INTERVAL = 15000;
+            const INITIAL_DELAY = 90000;
+
+            // --- ADATBÁZIS (VISSZAKERÜLT) ---
+            const previousGenerationsData = {
+                'csilla': [
+                    { displayName: 'Florex kert', fileName: 'Florex kert.html' },
+                    { displayName: 'PrinterPolc', fileName: 'PrinterPolc.html' },
+                    { displayName: 'Reflexshop', fileName: 'reflexshop.html' },
+                    { displayName: 'Walkingdog', fileName: 'walkingdog.html' },
+                    { displayName: 'Wondex', fileName: 'wondex.html' }
+                ],
+                'kata': [
+                    { displayName: 'Példa Webshop 1', fileName: 'pelda1.html' },
+                    { displayName: 'Példa Webshop 2', fileName: 'pelda2.html' }
+                ],
+                'zita': [
+                    { displayName: 'Zita Teszt Prezi', fileName: 'zita-test.html' }
+                ],
+                'robi': [], 
+                'krisztian': [
+                    { displayName: 'Krisztián Demo', fileName: 'krisztian-demo.html' }
+                ],
+                'imi': [
+                    { displayName: 'Imi Prezentáció', fileName: 'imi-prezi.html' },
+                    { displayName: 'Másik Demo', fileName: 'masik-demo.html' }
+                ],
+                'emil': [
+                    { displayName: 'Emil Analízis', fileName: 'emil-analizis.html' }
+                ]
+            };
+
 
             // --- State Variables ---
             let selectedPerson = null; 
@@ -410,14 +857,14 @@
             let activeUserButton = null;
             let activeLanguageButton = null;
 
-            // --- DOM Elements ---
+            // --- DOM Elements (Fő folyamat) ---
             const personStep = document.getElementById('person-step');
             const languageStep = document.getElementById('language-step');
             const domainStep = document.getElementById('domain-step');
             const loadingStep = document.getElementById('loading-step');
             const backButtonWrapper = document.getElementById('back-button-wrapper');
             
-            const allUserButtons = document.querySelectorAll('.user-btn');
+            const allUserButtons = document.querySelectorAll('#person-step .user-btn'); 
             const allLanguageLinks = document.querySelectorAll('.language-link');
             const backBtn = document.getElementById('back-btn');
             
@@ -426,6 +873,49 @@
 
             const statusTitle = document.getElementById('status-title');
             const statusText = document.getElementById('status-text');
+
+            const generatorContainer = document.getElementById('generator-container');
+            const stepIndicator = document.getElementById('step-indicator');
+            const indicator1 = document.getElementById('indicator-1');
+            const indicator2 = document.getElementById('indicator-2');
+            const indicator3 = document.getElementById('indicator-3');
+            const indicator4 = document.getElementById('indicator-4'); 
+            
+            const presenterSelection = document.getElementById('presenter-selection');
+            const languageSelection = document.getElementById('language-selection');
+            const domainSelection = document.getElementById('domain-selection'); 
+
+            // --- DOM ELEMEK A MODALHOZ (VISSZAKERÜLT) ---
+            const showPreviousBtn = document.getElementById('show-previous-btn');
+            const modalOverlay = document.getElementById('previous-modal-overlay');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalBackBtn = document.getElementById('modal-back-btn');
+            
+            const modalPersonStep = document.getElementById('modal-person-step');
+            const modalListStep = document.getElementById('modal-list-step');
+            
+            const modalUserButtons = document.querySelectorAll('.modal-user-btn'); 
+            const modalListTitle = document.getElementById('modal-list-title');
+            const modalListContainer = document.getElementById('modal-list-container');
+            
+            const modalSearchInput = document.getElementById('modal-search-input');
+
+
+            // === LÉPÉSJELZŐT FRISSÍTŐ FUNKCIÓ (4 LÉPÉS) ===
+            function updateIndicator(activeStep) {
+                indicator1.classList.toggle('active', activeStep === 1);
+                indicator2.classList.toggle('active', activeStep === 2);
+                indicator3.classList.toggle('active', activeStep === 3);
+                indicator4.classList.toggle('active', activeStep === 4); 
+
+                stepIndicator.style.display = 'flex'; 
+
+                if (activeStep === 4) {
+                    backButtonWrapper.classList.remove('is-visible');
+                }
+            }
+            
+            updateIndicator(1); // Kezdőállapot
 
             // --- STEP 1: CHOOSE PERSON ---
             allUserButtons.forEach(button => {
@@ -438,11 +928,13 @@
                     activeUserButton = button;
                     activeUserButton.classList.add('active');
 
-                    // Go to Step 2
+                    presenterSelection.textContent = button.textContent; 
+
                     personStep.classList.remove('is-visible');
                     setTimeout(() => { 
                         languageStep.classList.add('is-visible');
                         backButtonWrapper.classList.add('is-visible');
+                        updateIndicator(2);
                     }, 300);
                 });
             });
@@ -458,104 +950,101 @@
                     activeLanguageButton = button;
                     activeLanguageButton.classList.add('active');
                     
-                    // Go to Step 3
+                    languageSelection.textContent = button.textContent; 
+
                     languageStep.classList.remove('is-visible');
                     setTimeout(() => {
                         domainStep.classList.add('is-visible');
-                        domainInput.focus(); // Focus the input field
+                        domainInput.focus(); 
+                        updateIndicator(3);
                     }, 300);
                 });
             });
 
             // --- STEP 3: ENTER DOMAIN & GENERATE ---
-          // --- STEP 3: ENTER DOMAIN & GENERATE ---
             generateBtn.addEventListener('click', () => {
                 const selectedDomain = domainInput.value;
-
-                // Simple validation
                 if (!selectedDomain || selectedDomain.trim() === '' || !selectedDomain.includes('.')) {
                     alert('Please enter a valid webshop URL.');
                     return;
                 }
                 
-                // Disable button to prevent double-clicks
+                domainSelection.textContent = selectedDomain; 
+
                 generateBtn.disabled = true;
                 generateBtn.textContent = 'Generating...';
 
-                // Build the final webhook URL (EZ A RÉSZ VÁLTOZATLAN)
                 const finalWebhookUrl = `${WEBHOOK_BASE_URL}?person=${selectedPerson}&language=${selectedLanguage}&domain=${encodeURIComponent(selectedDomain)}`;
 
-                // Go to Step 4 (Loading)
                 domainStep.classList.remove('is-visible');
-                backButtonWrapper.classList.remove('is-visible'); // Hide back button
+                backButtonWrapper.classList.remove('is-visible'); 
                 
                 setTimeout(() => {
                     loadingStep.classList.add('is-visible');
+                    updateIndicator(4); 
                 }, 300);
 
-                // 1. Trigger Webhook (JAVÍTVA: "Image ping" hack a fetch helyett)
+                // 1. Trigger Webhook
                 try {
-                    // Ez létrehoz egy új kép elemet a memóriában.
-                    // A 'src' beállítása elindít egy GET kérést az URL-re.
-                    // Ez egy megbízható "fire-and-forget" metódus, ami kikerüli a CORS/mixed-content problémákat.
                     const img = new Image();
                     img.src = finalWebhookUrl;
                 } catch (error) {
                     console.warn("Webhook trigger error:", error);
                 }
 
-                // 2. Start Polling (JAVÍTVA: Dinamikus URL képzése)
-                // Itt összerakjuk az új URL-t a 'selectedPerson' (pl. "csilla") alapján
-                const dynamicRedirectUrl = `${REPO_BASE_URL}${selectedPerson}/index.html`;
+                // 2. Start Polling
+                const dynamicRedirectUrl = `${REPO_BASE_URL}${selectedPerson}/index.html`; // Itt is protokoll nélkül
+                startPolling(dynamicRedirectUrl);
+            });
 
-                // A pollingot már az új, dinamikus URL-lel indítjuk
-                startPolling(dynamicRedirectUrl);
-            });
-
-            // --- BACK BUTTON LOGIC (Handles all steps) ---
+            // --- BACK BUTTON LOGIC ---
             backBtn.addEventListener('click', () => {
-                // If on Domain Step (3), go back to Language (2)
                 if (domainStep.classList.contains('is-visible')) {
                     domainStep.classList.remove('is-visible');
                     setTimeout(() => {
                         languageStep.classList.add('is-visible');
+                        updateIndicator(2); 
                     }, 300);
-                    // De-select language
                     if (activeLanguageButton) {
                         activeLanguageButton.classList.remove('active');
                         activeLanguageButton = null;
                     }
                     selectedLanguage = null;
+                    languageSelection.textContent = ''; 
+                    domainSelection.textContent = ''; 
                 }
-                // If on Language Step (2), go back to Person (1)
                 else if (languageStep.classList.contains('is-visible')) {
                     languageStep.classList.remove('is-visible');
-                    backButtonWrapper.classList.remove('is-visible'); // Hide back button on first step
+                    backButtonWrapper.classList.remove('is-visible'); 
                     setTimeout(() => { 
                         personStep.classList.add('is-visible');
+                        updateIndicator(1); 
                     }, 300);
-                    // De-select person
                     if (activeUserButton) {
                         activeUserButton.classList.remove('active');
                         activeUserButton = null;
                     }
                     selectedPerson = null; 
+                    presenterSelection.textContent = '';
                 }
             });
 
 
             // --- STEP 4: POLLING LOGIC ---
             function startPolling(destinationUrl) {
-                setTimeout(() => checkStatus(destinationUrl), INITIAL_DELAY);
+                // A pollinghoz kell a protokoll, különben a fetch relatív URL-nek veszi
+                const urlWithProtocol = `https://${destinationUrl}`;
+                setTimeout(() => checkStatus(urlWithProtocol), INITIAL_DELAY);
             }
             
             function checkStatus(destinationUrl) {
+                // A 'destinationUrl' már tartalmazza a 'https://'-t
                 const urlToFetch = destinationUrl + '?t=' + new Date().getTime();
 
                 fetch(urlToFetch, { cache: "no-store" })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Network error: ' + response.statusText);
+                            throw new Error('Network error: '+ response.statusText);
                         }
                         return response.text();
                     })
@@ -566,7 +1055,7 @@
                             if (statusText) statusText.textContent = 'Your analysis is ready. We are redirecting you now.';
                             
                             setTimeout(() => {
-                                window.location.href = destinationUrl; 
+                                window.location.href = destinationUrl; // Itt már a protokollos URL-re irányítunk
                             }, 1000); 
 
                         } else {
@@ -580,13 +1069,107 @@
                         setTimeout(() => checkStatus(destinationUrl), POLLING_INTERVAL);
                     });
             }
+            
+            // --- MODAL LOGIKA (VISSZAKERÜLT) ---
+            
+            // 1. Modal megnyitása
+            showPreviousBtn.addEventListener('click', () => {
+                modalPersonStep.style.display = 'block';
+                modalListStep.style.display = 'none';
+                modalOverlay.classList.add('is-visible');
+            });
+
+            // 2. Modal bezárása (X gomb)
+            modalCloseBtn.addEventListener('click', () => {
+                modalOverlay.classList.remove('is-visible');
+                modalSearchInput.value = ''; 
+            });
+
+            // 3. Modal bezárása (háttérre kattintás)
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) { 
+                    modalOverlay.classList.remove('is-visible');
+                    modalSearchInput.value = ''; 
+                }
+            });
+
+            // 4. Modal "Vissza" gomb
+            modalBackBtn.addEventListener('click', () => {
+                modalListStep.style.display = 'none';
+                modalPersonStep.style.display = 'block';
+                modalSearchInput.value = ''; 
+            });
+
+            // 5. Modal névválasztó gombjai
+            modalUserButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const personKey = button.dataset.personValue;
+                    const personName = button.textContent;
+                    
+                    populatePresentationList(personKey, personName);
+                    
+                    modalPersonStep.style.display = 'none';
+                    modalListStep.style.display = 'block';
+                });
+            });
+
+            // 6. Lista feltöltő funkció (MÓDOSÍTVA)
+            function populatePresentationList(personKey, personName) {
+                modalListTitle.textContent = `${personName}'s Generations`;
+                modalListContainer.innerHTML = ''; 
+                modalSearchInput.value = ''; 
+                
+                const presentations = previousGenerationsData[personKey] || [];
+                
+                if (presentations.length === 0) {
+                    modalListContainer.innerHTML = `<div class="no-presentations">No previous presentations found for ${personName}.</div>`;
+                } else {
+                    presentations.forEach(pres => {
+                        // === ITT A KÉRT MÓDOSÍTÁS (https:// nélkül) ===
+                        const url = `${REPO_BASE_URL}${personKey}/${encodeURIComponent(pres.fileName)}`;
+                        
+                        const link = document.createElement('a');
+                        link.href = `https://${url}`; // A kattintható linkhez azért hozzáadjuk a protokollt
+                        link.target = '_blank'; 
+                        link.className = 'presentation-item';
+                        link.textContent = pres.displayName;
+                        
+                        modalListContainer.appendChild(link);
+                    });
+                    
+                    const noResultsEl = document.createElement('div');
+                    noResultsEl.id = 'modal-no-results'; 
+                    noResultsEl.className = 'no-presentations'; 
+                    noResultsEl.style.display = 'none';
+                    noResultsEl.textContent = 'No presentations found matching your search.';
+                    modalListContainer.appendChild(noResultsEl);
+                }
+            }
+            
+            // --- MODAL KERESŐ LOGIKA (VISSZAKERÜLT) ---
+            modalSearchInput.addEventListener('input', () => {
+                const searchTerm = modalSearchInput.value.toLowerCase().trim();
+                const allItems = modalListContainer.querySelectorAll('.presentation-item');
+                let visibleCount = 0;
+                
+                allItems.forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+                    const isVisible = itemText.includes(searchTerm);
+                    
+                    item.style.display = isVisible ? 'block' : 'none';
+                    if (isVisible) {
+                        visibleCount++;
+                    }
+                });
+                
+                const noResultsEl = document.getElementById('modal-no-results');
+                if (noResultsEl) { 
+                    noResultsEl.style.display = (visibleCount === 0) ? 'block' : 'none';
+                }
+            });
+
         });
     </script>
 
 </body>
 </html>
-
-
-
-
-
